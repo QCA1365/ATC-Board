@@ -107,9 +107,9 @@ def ajouterAvion():
     
 	langue = input("Langue: ")
 	if langue.upper() == "EN":
-		remplirDictionnaire("alphabet_anglais", anglais)
+		remplirDictionnaire("dictionnaires/alphabet_anglais", anglais)
 	elif langue.upper() == "FR":
-		remplirDictionnaire("alphabet_francais", francais)
+		remplirDictionnaire("dictionnaires/alphabet_francais", francais)
         
 	destination = input("Destination: ")
     
@@ -290,14 +290,84 @@ def creerClearance(avion):
 
 		clearance = 'TKOF'
 
-    #Clearance leg VFR
+    #Clearance leg VFR							##### ========== AJOUTER LE FRANCAIS ========== #####
 	elif typeClearance == '6':
 		if regle == 'I' or regle == 'Y':
 			print('Non disponible pour les vols IFR')
 			return()
 
 		elif regle == 'V' or 'Z':
-			clearance_txt = 'TO BE DEFINED'
+			print '1. Circuit'
+			print '2. Arrivees'
+			position = input('Quelle position? ')
+			
+			if position == '1':
+				print '1. Report end of Downwind'
+				print '2. Downwind -> Final'
+				print '3. Extend Downwind'
+				position2 = input('Quelle clearance?')
+				
+				if position2 == '1':
+					clearance_txt = nom + ', report end of downwind runway ' + rwy
+					clearance = 'DWND'
+				
+				elif position2 == '2':
+					numero = input('Numero en approche? ')
+					clearance_txt = nom + ', report on final runway ' +rwy', number ' + numero
+					clearance = 'FINL'
+				
+				elif position2 == '3':
+					numero = input('Numero en approche? ')
+					clearance_txt = nom + ', extend downwind, number ' + numero + ', 4 miles final runway ' + rwy
+					clearance = 'EXTD'
+					
+			if position == '2':
+				altimetre = input('QNH? ')
+				print '1. approche straight-in'
+				print '2. fin de downwind'
+				print '3. VFR entry-point'
+				position2 = input('Quelle clearance? ')
+
+				if position2 == '1':
+					clearance_txt = nom + ', make straight-in approach runway ' + rwy + ', winds [VENTS], altimeter ' + altimetre
+					clearance = 'SIAP'
+				
+				elif position2 == '2':
+					numero = input('Numero en approche? ')
+					clearance_txt = nom + ', report on final runway ' + rwy + ', number ' + numero
+					clearance = 'FINL'
+					
+				elif position == '3':
+					print "1. Arrive de l'est"
+					print "2. Arrive de l'ouest"
+					cote = input('Quel cote? ')	
+
+					if cote == '1':
+						if rwy == '06R':
+							clearance_txt = nom + ', join left hand downwind runway ' + rwy + ', wind [VENTS], altimeter ' + altimetre
+							clearance = 'LHDW'
+						
+						elif rwy == '24L':
+							clearance_txt = nom + ', join right hand downwind runway ' + rwy + ', wind [VENTS], altimeter ' + altimetre
+							clearance = 'RHDW'
+					
+					elif cote == '2':
+						if rwy == '06R':
+							clearance_txt = nom + ', join right hand downwind runway ' + rwy + ', wind [VENTS], altimeter ' + altimetre
+							clearance = 'RHDW'
+						
+						elif rwy == '24L':
+							clearance_txt = nom + ', join left hand downwind runway ' + rwy + ', wind [VENTS], altimeter ' + altimetre
+							clearance = 'LHDW'
+
+#atterissage
+
+	elif typeClearance == '7':
+		if langue == 'EN':
+			sortie = input('Quelle sortie? ')
+			clearance_txt = nom + ', winds [VENTS], exit at ' + sortie + ', cleared to land runway ' + rwy
+			clearance = 'LDG'+rwy
+			
 
         #MENU LEG ICI
 
@@ -316,7 +386,7 @@ def ajouterClearance():
 			print("\n\n================== CLEARANCE ==================\n")
 			afficherListeAvions()
 
-			avionClearance = input("\nA quel avion veux-tu ajouter une clearance? ")
+			avionClearance = input("\nA quel avion veux-tu ajouter une clearance? ").upper()
 			avionPresent = False
 			indexAvion = []
 			for i in listeAvions:
@@ -337,8 +407,8 @@ def ajouterClearance():
 
 #PROGRAMME PRINCIPAL
 remplirSquawk()
-remplirDictionnaire("compagnies", compagnies)
-remplirDictionnaire("aeroports", aeroports)
+remplirDictionnaire("dictionnaires/compagnies", compagnies)
+remplirDictionnaire("dictionnaires/aeroports", aeroports)
 
 while True:
 	print("\n\n================== PROGRAMME PRINCIPAL ==================\n")
