@@ -1,0 +1,25 @@
+# ------------------- 5 ------------------------ #
+
+	elif typeClearance == '5':
+		if regle == 'I' or regle == 'Y' or regle == 'Z':
+			if langue == 'EN':
+                clearance_txt = nom+' contact Montreal departure on '+frequenceDepart+' airborne, cleared for takeoff runway '+rwy
+
+			elif langue == 'FR':
+                print('\nfr')
+
+		elif regle == 'V':
+			if rwy == '06R':
+				if langue == 'EN':
+                    clearance_txt = nom+' report left hand downwind runway '+rwy+', cleared for takeoff, winds [VENTS]'
+
+				elif langue == 'FR':
+                    clearance_txt = nom+'rappelez au downind main gauche piste '+rwy+', autorise decollage, vents [VENTS]'
+			elif rwy == '24L':
+				if langue == 'EN':
+					clearance_txt = nom+' report right hand downwind runway '+rwy+', cleared for takeoff, winds [VENTS]' 
+				elif langue == 'EN':
+					clearance_txt = nom+'rappelez au downwind main droite piste'+rwy+', autorise decollage, vents [VENTS]
+
+        clearance = 'TKOF'
+
