@@ -8,7 +8,22 @@ aeroports = []
 anglais = []
 francais = []
 frequenceDepart = input('Frequence de depart: ')
+position = []
 
+
+#Cette section est inutile pour le moment... Doit etre incorporee dans les structures plus basses
+#Entres autres dans des options a ajouter eventuellement telles que aeroport d'arrivee
+#Ou encore pour definir certaines phraseologies a adopter comme le rapport a certains points
+
+def position():
+	print ('1. XXXX_DEL')
+	print ('2. XXXX_GND')
+	print ('3. XXXX_TWR')
+	print ('4. XXXX_DEP')
+	print ('5. XXXX_APP')
+	print ('6. XXXX_CTR')
+	position = input('Quelle position? ')
+	return position
 
 #REMPLIR SQUAWK
 def remplirSquawk():
@@ -224,52 +239,58 @@ def creerClearance(avion):
                 
 			elif langue == 'FR':
 				clearance_txt = nom+', depart vers '+indicatifAeroport+' approuve, depart via '+sid+', puis route prevue, piste '+rwy+' prevue , montee initiale '+flightLevel+', squawk '+squawk
-                
-			else:
-				print('\nAucun message disponible: Verifiez la langue')
-			clearance = 'INIT'
 
-        #Clearance Initiale + Taxi VFR
+#Clearance Initiale + Taxi VFR
 		elif regle == 'V' or regle == 'Z':
-			if destination == 'CYUL':#A modifier pour l'examen ACC
-				if langue == 'EN':
-					taxiRoute = input('Taxi? ')
-					clearance_txt = nom+', right hand pattern '+flightLevel+', squawk '+squawk+' taxi holding point runway '+rwy+' via '+taxiRoute
+			taxiRoute = input('Taxi? ')
+			avion.append(taxiRoute)
+			if destination == 'CYUL':	### ---------- A modifier pour l'examen ACC ---------- ###
+				if runway == '24L' or runway == '06L': 
+					if langue == 'EN':
+						clearance_txt = nom+', right hand pattern '+flightLevel+', squawk '+squawk+' taxi holding point runway '+rwy+' via '+taxiRoute
+					
+					elif langue == 'FR':
+						clearance_txt = nom+', tour de piste main droite a '+flightLevel+' pieds, squawk '+squawk+" taxi point d'arret piste "+rwy+' via '+taxiRoute 
+				
+				elif runway == '06R' or runway  == '24R':
+					if langue == 'EN':
+						clearance_txt = nom+', left hand pattern '+flightLevel+', squawk '+ squawk+'taxi holding point runway '+rwy+' via '+taxiRoute
                     
+                    elif langue == 'FR':
+                    	clearance_txt = nom+', tour de piste main gauche a '+flightLevel+' pieds, squawk '+squawk+" taxi point d'arret piste "+rwy+' via '+taxiRoute 
 			else:
 				if langue == 'EN':
-					taxiRoute = input('Taxi? ')
 					clearance_txt = nom+' initial climb '+flightLevel+', squawk '+squawk+', taxi holding point runway '+rwy+' via '+taxiRoute+', hold short '+rwy+', report ready for takeoff'
 
 				elif langue == 'FR':
-					print('\nfr')
+					clearance_txt = nom + ', montee initiale ' + flightLevel + ', squawk ' + squawk + ", roulez point d'arret piste "+ rwy + ' via ' + taxiRoute + "restez a l'ecart piste " + rwy + ', rappelez pret a decoller '
 
-				clearance = 'TAXI'
+			clearance = 'TAXI'
                 
-    #Clearance Push + Start
+#Clearance Push + Start
 	elif typeClearance == '2':
 		if langue == 'EN':
 			clearance_txt = nom+', pushback and startup at your discretion, advise ready for taxi.'
 
 		elif langue == 'FR':
-			print("\nfr")
+			clearance_txt = nom + ' repoussage et demarrage a votre discretion, rappelez pret au taxi '
 
 		clearance = 'PUSH'
         
-    #Clearance Taxi
+#Clearance Taxi
 	elif typeClearance == '3':
 		altimetre = input('QNH? ')
 		taxiRoute = input('Taxi? ')
+		avion.append(taxiRoute)
 		if langue == 'EN':
 			clearance_txt = nom+', runway '+rwy+', altimeter '+altimetre+ ', taxi '+taxiRoute+', hold short '+rwy+', report ready for takeoff'
-			avion.append(taxiRoute)
             
 		elif langue == 'FR':
-			print('\nfr')
+			clearance_txt = nom + ', piste ' + rwy + ', altimetre ' + altimetre + ', taxi ' + taxiRoute + ", restez a l'ecart piste " + piste + ', rappelez pret a decoller' 
 
 		clearance = 'TAXI'
 
-    #Clearance Line-up
+#Clearance Line-up
 	elif typeClearance == '4':
 		if langue == 'EN':
 			clearance_txt = nom+' line up and wait runway '+rwy
@@ -279,26 +300,33 @@ def creerClearance(avion):
 
 		clearance = 'LNUP'
 
-    #Clearance Decollage
+#Clearance Decollage
 	elif typeClearance == '5':
 		if regle == 'I' or regle == 'Y' or regle == 'Z':
 			if langue == 'EN':
 				clearance_txt = nom+' contact Montreal departure on '+frequenceDepart+' airborne, cleared for takeoff runway '+rwy
 
 			elif langue == 'FR':
-				print('\nfr')
+				clearance_txt = nom + ', contactez Montreal departs sur ' + frequenceDepart + ' en vol, autorise decollage piste ' + rwy
 
 		elif regle == 'V':
-			if rwy == '06R':
+			if rwy == '06R' or rwy == '24R':
 				if langue == 'EN':
-					clearance_txt = nom+' report left hand downwind runway '+rwy+', cleared for takeoff, winds [VENTS]'
+					clearance_txt = nom+ ' report right hand downwind runway '+rwy+', cleared for takeoff, winds [VENTS]'
 
 				elif langue == 'FR':
-					print('\nfr')
+					clearance_txt = nom+ ' rappelez downwind main droite '+rwy+', autorise decollage, vents [VENTS]'
+
+			elif rwy == '06L' or rwy == '24L':
+				if langue == 'EN':
+					clearance_txt = nom + 'report left hand downwind runway '+rwy+', cleared for takeoff, winds [VENTS]
+				
+				elif langue == 'FR':
+					clearance_txt = nom+ ' rappelez downwind main gauche '+rwy+', autorise decollage, vents [VENTS]'
 
 		clearance = 'TKOF'
 
-    #Clearance leg VFR							##### ========== AJOUTER LE FRANCAIS ========== #####
+#Clearance leg VFR
 	elif typeClearance == '6':
 		if regle == 'I' or regle == 'Y':
 			print('Non disponible pour les vols IFR')
@@ -316,17 +344,34 @@ def creerClearance(avion):
 				position2 = input('Quelle clearance?')
 				
 				if position2 == '1':
-					clearance_txt = nom + ', report end of downwind runway ' + rwy
+					if langue == 'EN':
+						clearance_txt = nom + ', report end of downwind runway ' + rwy
+					
+					elif langue == 'FR':
+						clearance_txt = nom + ', rappelez fin de downwind piste ' + rwy
+					
 					clearance = 'DWND'
 				
 				elif position2 == '2':
 					numero = input('Numero en approche? ')
-					clearance_txt = nom + ', report on final runway ' +rwy+', number ' + numero
+					
+					if langue == 'EN':
+						clearance_txt = nom + ', report on final runway ' +rwy+', number ' + numero
+						
+					elif langue == 'FR':
+						clearance_txt = nom + ', report on final runway ' + rwy + ',numero ' + numero
+										
 					clearance = 'FINL'
 				
 				elif position2 == '3':
 					numero = input('Numero en approche? ')
-					clearance_txt = nom + ', extend downwind, number ' + numero + ', 4 miles final runway ' + rwy
+					
+					if langue == 'EN':
+						clearance_txt = nom + ', extend downwind, number ' + numero + ', 4 miles final runway ' + rwy
+						
+					elif langue  == 'FR':
+						clearance_txt = nom + ', allongez downwind, numero ' + numero + ', finale 4 nautiques piste ' + rwy
+					
 					clearance = 'EXTD'
 					
 			if position == '2':
@@ -337,12 +382,23 @@ def creerClearance(avion):
 				position2 = input('Quelle clearance? ')
 
 				if position2 == '1':
-					clearance_txt = nom + ', make straight-in approach runway ' + rwy + ', winds [VENTS], altimeter ' + altimetre
-					clearance = 'SIAP'
+					if langue == 'EN':
+						clearance_txt = nom + ', make straight-in approach runway ' + rwy + ', winds [VENTS], altimeter ' + altimetre
+					
+					elif langue == 'FR':
+						clearance_txt = nom + ', faites une approche directe piste ' + rwy + ', vents [VENTS], altimetre ' + altimetre
+					
+					clearance = 'APPR'
 				
 				elif position2 == '2':
 					numero = input('Numero en approche? ')
-					clearance_txt = nom + ', report on final runway ' + rwy + ', number ' + numero
+					
+					if langue == 'EN':
+						clearance_txt = nom + ', report on final runway ' + rwy + ', number ' + numero
+						
+					elif langue == 'FR':
+						clearance_txt = nom + ', rappelez en finale piste ' + rwy + ', numero ' + numero
+					
 					clearance = 'FINL'
 					
 				elif position == '3':
@@ -351,21 +407,37 @@ def creerClearance(avion):
 					cote = input('Quel cote? ')	
 
 					if cote == '1':
-						if rwy == '06R':
-							clearance_txt = nom + ', join left hand downwind runway ' + rwy + ', wind [VENTS], altimeter ' + altimetre
+						if rwy == '06R' or rwy == '24R':
+							if langue == 'EN':
+								clearance_txt = nom + ', join left hand downwind runway ' + rwy + ', wind [VENTS], altimeter ' + altimetre
+							
+							elif langue == 'FR':
+								clearance_txt = nom + ', rejoignez downwind main gauche ' + rwy + ', vents [VENTS], altimetre ' + altimetre
+							
 							clearance = 'LHDW'
 						
-						elif rwy == '24L':
-							clearance_txt = nom + ', join right hand downwind runway ' + rwy + ', wind [VENTS], altimeter ' + altimetre
+						elif rwy == '24L' or rwy == '24L':
+							if langue == 'EN':
+								clearance_txt = nom + ', join right hand downwind runway ' + rwy + ', wind [VENTS], altimeter ' + altimetre
+							
+							elif langue == 'FR':
+								clearance_txt = nom + ', rejoignez downwind main gauche piste ' + rwy + ', vents [VENTS], altimetre ' + altimetre
+							
 							clearance = 'RHDW'
 					
 					elif cote == '2':
-						if rwy == '06R':
-							clearance_txt = nom + ', join right hand downwind runway ' + rwy + ', wind [VENTS], altimeter ' + altimetre
+						if rwy == '06R' or rwy == '24R':
+							if langue == 'EN':
+								clearance_txt = nom + ', join right hand downwind runway ' + rwy + ', wind [VENTS], altimeter ' + altimetre
 							clearance = 'RHDW'
 						
-						elif rwy == '24L':
-							clearance_txt = nom + ', join left hand downwind runway ' + rwy + ', wind [VENTS], altimeter ' + altimetre
+						elif rwy == '24L' or rwy == '06L':
+							if langue == 'EN':
+								clearance_txt = nom + ', join left hand downwind runway ' + rwy + ', wind [VENTS], altimeter ' + altimetre
+
+							elif langue == 'FR':
+								clearance_txt = nom + ', rejoignez downwind main gauche ' + rwy + ', vents [VENTS], altimetre ' + altimetre
+							
 							clearance = 'LHDW'
 
 #atterissage
