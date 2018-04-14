@@ -256,8 +256,8 @@ def creerClearance(avion):
 					if langue == 'EN':
 						clearance_txt = nom+', left hand pattern '+flightLevel+', squawk '+ squawk+'taxi holding point runway '+rwy+' via '+taxiRoute
                     
-                    elif langue == 'FR':
-                    	clearance_txt = nom+', tour de piste main gauche a '+flightLevel+' pieds, squawk '+squawk+" taxi point d'arret piste "+rwy+' via '+taxiRoute 
+					elif langue == 'FR':
+						clearance_txt = nom+', tour de piste main gauche a '+flightLevel+' pieds, squawk '+squawk+" taxi point d'arret piste "+rwy+' via '+taxiRoute 
 			else:
 				if langue == 'EN':
 					clearance_txt = nom+' initial climb '+flightLevel+', squawk '+squawk+', taxi holding point runway '+rwy+' via '+taxiRoute+', hold short '+rwy+', report ready for takeoff'
@@ -319,7 +319,7 @@ def creerClearance(avion):
 
 			elif rwy == '06L' or rwy == '24L':
 				if langue == 'EN':
-					clearance_txt = nom + 'report left hand downwind runway '+rwy+', cleared for takeoff, winds [VENTS]
+					clearance_txt = nom + 'report left hand downwind runway '+rwy+', cleared for takeoff, winds [VENTS]'
 				
 				elif langue == 'FR':
 					clearance_txt = nom+ ' rappelez downwind main gauche '+rwy+', autorise decollage, vents [VENTS]'
