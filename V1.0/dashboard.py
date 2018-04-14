@@ -245,6 +245,8 @@ def creerClearance(avion):
                 
 			elif langue == 'FR':
 				clearance_txt = nom+', depart vers '+indicatifAeroport+' approuve, depart via '+sid+', puis route prevue, piste '+rwy+' prevue , montee initiale '+flightLevel+', squawk '+squawk
+			
+			clearance = 'INIT'
 
 #Clearance Initiale + Taxi VFR
 		elif regle == 'V' or regle == 'Z':
