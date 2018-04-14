@@ -9,6 +9,7 @@ anglais = []
 francais = []
 frequenceDepart = input('Frequence de depart: ')
 position = []
+nom_controle = []
 
 
 #Cette section est inutile pour le moment... Doit etre incorporee dans les structures plus basses
@@ -24,6 +25,11 @@ def position():
 	print ('6. XXXX_CTR')
 	position = input('Quelle position? ')
 	return position
+	
+def frequences():
+	nom_controle = input('Quel est le code du controleur? ')
+	frequence_controle = input('Quelle est la frquence du controleur')
+	
 
 #REMPLIR SQUAWK
 def remplirSquawk():
@@ -483,7 +489,7 @@ def creerClearance(avion):
 				clearance_txt = nom + ', cleared low pass runway ' + rwy + ', winds [VENTS]'
 				
 			elif langue == 'FR':
-				clearance_txt = nom + ', autorise low pass piste ' + rwy + ', winds [VENTS]
+				clearance_txt = nom + ', autorise low pass piste ' + rwy + ', winds [VENTS]'
 				
 			clearance = 'LOWP'
 			
@@ -601,7 +607,7 @@ def ajouterClearance():
 		print("\nAUCUN AVION DANS LA LISTE")
 
 
-#PROGRAMME PRINCIPAL
+#### ===== ----- ===== ----- ===== ----- ===== ----- PROGRAMME PRINCIPAL ----- ===== ----- ===== ----- ===== ----- =====
 remplirSquawk()
 remplirDictionnaire("dictionnaires/compagnies", compagnies)
 remplirDictionnaire("dictionnaires/aeroports", aeroports)
