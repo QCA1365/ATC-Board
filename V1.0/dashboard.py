@@ -1,4 +1,6 @@
 import os
+from sys import platform
+from datetime import datetime
 listeAvions = []
 squawk = []
 compagnies = []
@@ -52,6 +54,10 @@ def flightLevel():
 		elif regle.capitalize() == 'Y' or regle.capitalize() == 'Z':
 			flight_level = 'CHECK'
 			return (flight_level, regle.capitalize())
+		
+		elif regle == 'exit':
+			flight_level = 'VOID'
+			return (flight_level, regle.upper())
 
 		else:
 			print('Veuillez entrer selon les options suivantes:')
@@ -110,14 +116,15 @@ def ajouterAvion():
 		remplirDictionnaire("dictionnaires/alphabet_anglais", anglais)
 	elif langue.upper() == "FR":
 		remplirDictionnaire("dictionnaires/alphabet_francais", francais)
-        
+		
 	destination = input("Destination: ")
-    
 	(flightlevel, regle) = flightLevel()
+	if regle == 'EXIT':
+		return()
 	sid = input("SID: ")
 	rwy = input("RWY: ")
 	squawk = assignerSquawk()
-
+	
 
 	avion = []    
 	avion.append(nom.upper())
@@ -172,6 +179,7 @@ def creerClearance(avion):
 	print('6. Leg VFR')
 	print('7. Landing')
 	print('8. Depart espace aerien VFR')
+	print('9. Urgence')
 	typeClearance = input('Quelle clearance veux-tu donner? ')
 
 	longueurNom = len(avion[0])
@@ -297,14 +305,14 @@ def creerClearance(avion):
 			return()
 
 		elif regle == 'V' or 'Z':
-			print '1. Circuit'
-			print '2. Arrivees'
+			print ('1. Circuit')
+			print ('2. Arrivees')
 			position = input('Quelle position? ')
 			
 			if position == '1':
-				print '1. Report end of Downwind'
-				print '2. Downwind -> Final'
-				print '3. Extend Downwind'
+				print ('1. Report end of Downwind')
+				print ('2. Downwind -> Final')
+				print ('3. Extend Downwind')
 				position2 = input('Quelle clearance?')
 				
 				if position2 == '1':
@@ -313,7 +321,7 @@ def creerClearance(avion):
 				
 				elif position2 == '2':
 					numero = input('Numero en approche? ')
-					clearance_txt = nom + ', report on final runway ' +rwy', number ' + numero
+					clearance_txt = nom + ', report on final runway ' +rwy+', number ' + numero
 					clearance = 'FINL'
 				
 				elif position2 == '3':
@@ -323,9 +331,9 @@ def creerClearance(avion):
 					
 			if position == '2':
 				altimetre = input('QNH? ')
-				print '1. approche straight-in'
-				print '2. fin de downwind'
-				print '3. VFR entry-point'
+				print ('1. approche straight-in')
+				print ('2. fin de downwind')
+				print ('3. VFR entry-point')
 				position2 = input('Quelle clearance? ')
 
 				if position2 == '1':
@@ -338,8 +346,8 @@ def creerClearance(avion):
 					clearance = 'FINL'
 					
 				elif position == '3':
-					print "1. Arrive de l'est"
-					print "2. Arrive de l'ouest"
+					print ("1. Arrive de l'est")
+					print ("2. Arrive de l'ouest")
 					cote = input('Quel cote? ')	
 
 					if cote == '1':
@@ -363,12 +371,71 @@ def creerClearance(avion):
 #atterissage
 
 	elif typeClearance == '7':
-		if langue == 'EN':
+		print ('1. Atterissage')
+		print ('2. Touch and go')
+		print ('3. Low pass')
+		print ('4. Stop and go')
+		print ('5. Go around')
+		operation = input('Quelle operation? ')
+		
+		if operation == '1':
 			sortie = input('Quelle sortie? ')
-			clearance_txt = nom + ', winds [VENTS], exit at ' + sortie + ', cleared to land runway ' + rwy
-			clearance = 'LDG'+rwy
+			if langue == 'EN':
+				clearance_txt = nom + ', winds [VENTS], exit at ' + sortie + ', cleared to land runway ' + rwy
+				clearance = 'LDG'+rwy
+		elif operation == '2':
+			clearance_txt = nom + ', runway ' + rwy + ', cleared touch and go, winds [VENTS]'
+			clearance = 'T&GO'
+		
+		elif operation == '3':
+			clearance_txt = nom + ', cleared low pass runway ' + rwy + ', winds [VENTS]'
+			clearance = 'LOWP'
 			
+		elif operation == '4':
+			clearance_txt = nom + ', cleared to land runway ' + rwy + ', winds [VENTS] \n Report ready for take-off -> Donner clearance Takeoff'
+			clearance = 'S&GO'
+			
+		elif operation == '5':
+			print ('1. Initie par ATC')
+			print ('2. Initie par pilote')
+			personne = input('Qui a initie le Go-Around? ')
+			
+			if personne == '1':
+				raison = input('Raison? ')
+				clearance_txt = nom + ', go around, ' + raison	
+			
+			elif personne == '2':
+				clearance_txt = nom + ', roger'
+			
+			clearance = 'G-A'
+			
+	elif typeClearance == '8':
+		print ('1. Decollage -> point')
+		print ('2. Sortie zone de controle')
+		maniere = input('Quelle clearance? ')
+		
+		if maniere == '1':
+			point = input('Que est le point de rapport? ')
+			clearance_txt = nom + ', report over ' + point + ', runway ' + rwy + ', cleared for takeoff, winds [VENTS]'
+			clearance = 'TOPT'
+		
+		elif maniere == '2':
+			clearance_txt = nom + ', frequency change approved, monitor UNICOM 122.8, good day!'
 
+	elif typeClearance == '9':
+		print ('1. PAN PAN' )
+		print ('2. MAYDAY MAYDAY')
+		urgence = input('Quelle urgence? ')
+		if urgence == '1':
+			urgence = 'PAN PAN'
+			clearance = 'PAN PAN'
+		elif urgence == '2':
+			urgence = 'MAYDAY'
+			clearance = 'MAYDAY'
+		UTC = datetime.utcnow().strftime('%H:%M')
+		clearance_txt = nom + ', Roger ' + urgence + ' at time ' + UTC + 'z'
+		
+		
         #MENU LEG ICI
 
 	print("\n"+clearance_txt)
@@ -381,7 +448,10 @@ def creerClearance(avion):
 #AJOUTER UNE CLEARANCE A UN AVION
 def ajouterClearance():
 	if len(listeAvions) > 0:
-		os.system('clear')
+		if platform == "linux" or platform == "linux2":
+			os.system('clear')
+		elif platform == "win32":
+			os.system('CLS')
 		while True:
 			print("\n\n================== CLEARANCE ==================\n")
 			afficherListeAvions()
@@ -400,7 +470,10 @@ def ajouterClearance():
 			else:
 				print("\nAVION INTROUVABLE...")
 				input('')
-				os.system('clear')
+				if platform == "linux" or platform == "linux2":
+					os.system('clear')
+				elif platform == "win32":
+					os.system('CLS')
 	else:
 		print("\nAUCUN AVION DANS LA LISTE")
 
@@ -443,4 +516,7 @@ while True:
 		print("\nCHOIX INEXISTANT")
         
 	input('')
-	os.system('clear')
+	if platform == "linux" or platform == "linux2":
+		os.system('clear')
+	elif platform == "win32":
+		os.system('CLS')
