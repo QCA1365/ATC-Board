@@ -17,7 +17,7 @@ nom_controle = []
 
 def position():
 	position = []
-	while position != '1' or position != '2' or position != '3' or position != '4' or position != '5' or position != '6':
+	while position != '1' and position != '2' and position != '3' and position != '4' and position != '5' and position != '6':
 		print ('1. XXXX_DEL')
 		print ('2. XXXX_GND')
 		print ('3. XXXX_TWR')
@@ -25,7 +25,7 @@ def position():
 		print ('5. XXXX_APP')
 		print ('6. XXXX_CTR')
 		position = input('Quelle position? ')
-		return position
+	return position	
 
 def affichage(position):
 	if position == '1':
