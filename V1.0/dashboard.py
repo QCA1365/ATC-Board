@@ -27,8 +27,6 @@ def position():
 		position = input('Quelle position? ')
 		return position
 
-position = position()
-
 def affichage(position):
 	if position == '1':
 		print('1. Clearance initiale')
@@ -78,7 +76,7 @@ def remplirDictionnaire(nomFichier, liste):
 	values = []
 	for i in lines:
 		code, indicatif = i.split(",")
-		indicatif = indicatif.split("\n")[0];
+		indicatif = indicatif.split("\n")[0]
 		values.append(code)
 		values.append(indicatif)
 		liste.append(values)
@@ -267,7 +265,7 @@ def creerClearance(avion,position):
 			
 			clearance = 'INIT'
 
-#Clearance Initiale + Taxi VFR
+		#Clearance Initiale + Taxi VFR
 		elif regle == 'V' or regle == 'Z':
 			taxiRoute = input('Taxi? ')
 			avion.append(taxiRoute)
@@ -294,7 +292,7 @@ def creerClearance(avion,position):
 
 			clearance = 'TAXI'
                 
-#Clearance Push + Start
+	#Clearance Push + Start
 	elif typeClearance == '2':
 		if langue == 'EN':
 			clearance_txt = nom+', pushback and startup at your discretion, advise ready for taxi.'
@@ -304,7 +302,7 @@ def creerClearance(avion,position):
 
 		clearance = 'PUSH'
         
-#Clearance Taxi
+	#Clearance Taxi
 	elif typeClearance == '3':
 		altimetre = input('QNH? ')
 		taxiRoute = input('Taxi? ')
@@ -317,7 +315,7 @@ def creerClearance(avion,position):
 
 		clearance = 'TAXI'
 
-#Clearance Line-up
+	#Clearance Line-up
 	elif typeClearance == '4':
 		if langue == 'EN':
 			clearance_txt = nom+' line up and wait runway '+rwy
@@ -327,7 +325,7 @@ def creerClearance(avion,position):
 
 		clearance = 'LNUP'
 
-#Clearance Decollage
+	#Clearance Decollage
 	elif typeClearance == '5':
 		if regle == 'I' or regle == 'Y' or regle == 'Z':
 			if langue == 'EN' and frequenceDepart != '122.8' :
@@ -359,7 +357,7 @@ def creerClearance(avion,position):
 
 		clearance = 'TKOF'
 
-#Clearance leg VFR
+	#Clearance leg VFR
 	elif typeClearance == '6':
 		if regle == 'I' or regle == 'Y':
 			print('Non disponible pour les vols IFR')
@@ -480,7 +478,7 @@ def creerClearance(avion,position):
 							clearance = 'LHDW'
 
 
-#Clearances d'approche
+	#Clearances d'approche
 	elif typeClearance == '7':
 		print ('1. Atterissage')
 		print ('2. Touch and go')
@@ -638,6 +636,7 @@ def ajouterClearance():
 remplirSquawk()
 remplirDictionnaire("dictionnaires/compagnies", compagnies)
 remplirDictionnaire("dictionnaires/aeroports", aeroports)
+position = position()
 
 while True:
 	print("\n\n================== PROGRAMME PRINCIPAL ==================\n")
