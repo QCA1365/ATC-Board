@@ -8,7 +8,6 @@ aeroports = []
 anglais = []
 francais = []
 frequenceDepart = input('Frequence de depart: ')
-position = []
 nom_controle = []
 
 
@@ -17,14 +16,42 @@ nom_controle = []
 #Ou encore pour definir certaines phraseologies a adopter comme le rapport a certains points
 
 def position():
-	print ('1. XXXX_DEL')
-	print ('2. XXXX_GND')
-	print ('3. XXXX_TWR')
-	print ('4. XXXX_DEP')
-	print ('5. XXXX_APP')
-	print ('6. XXXX_CTR')
-	position = input('Quelle position? ')
-	return position
+	position = []
+	while position != '1' or position != '2' or position != '3' or position != '4' or position != '5' or position != '6':
+		print ('1. XXXX_DEL')
+		print ('2. XXXX_GND')
+		print ('3. XXXX_TWR')
+		print ('4. XXXX_DEP')
+		print ('5. XXXX_APP')
+		print ('6. XXXX_CTR')
+		position = input('Quelle position? ')
+		return position
+
+position = position()
+
+def affichage(position):
+	if position == '1':
+		print('1. Clearance initiale')
+
+	elif position == '2':
+		print('1. Clearance initiale')
+		print('2. Push et demarrage')
+		print('3. Taxi')
+		print('9. Urgence')
+	
+	elif position == '3' or position == '4'or position == '5' or  position == '6' :
+		print('1. Clearance initiale')
+		print('2. Push et demarrage')
+		print('3. Taxi')
+		print('4. Line-up')
+		print('5. Takeoff')
+		print('6. Leg VFR')
+		print('7. Landing')
+		print('8. Depart espace aerien VFR')
+		print('9. Urgence')
+	
+	else:
+		print("La position n'est pas valide; veuillez redemarrer.")
 	
 def frequences():
 	nom_controle = input('Quel est le code du controleur? ')
@@ -191,16 +218,8 @@ def supprimerAvion():
 
 
 #CREER UNE CLEARANCE
-def creerClearance(avion):
-	print('1. Clearance initiale')
-	print('2. Push et demarrage')
-	print('3. Taxi')
-	print('4. Line-up')
-	print('5. Takeoff')
-	print('6. Leg VFR')
-	print('7. Landing')
-	print('8. Depart espace aerien VFR')
-	print('9. Urgence')
+def creerClearance(avion,position):
+	affichage(position)
 	typeClearance = input('Quelle clearance veux-tu donner? ')
 
 	longueurNom = len(avion[0])
@@ -311,10 +330,16 @@ def creerClearance(avion):
 #Clearance Decollage
 	elif typeClearance == '5':
 		if regle == 'I' or regle == 'Y' or regle == 'Z':
-			if langue == 'EN':
+			if langue == 'EN' and frequenceDepart != '122.8' :
 				clearance_txt = nom+' contact Montreal departure on '+frequenceDepart+' airborne, cleared for takeoff runway '+rwy
 
-			elif langue == 'FR':
+			elif langue == 'FR' and frequenceDepart != '122.8':
+				clearance_txt = nom + ', contactez Montreal departs sur ' + frequenceDepart + ' en vol, autorise decollage piste ' + rwy
+			
+			elif langue == 'EN' and frequenceDepart == '122.8' :
+				clearance_txt = nom+' monitor unicom on '+frequenceDepart+' airborne, cleared for takeoff runway '+rwy
+				
+			elif langue == 'FR' and frequenceDepart == '122.8':
 				clearance_txt = nom + ', contactez Montreal departs sur ' + frequenceDepart + ' en vol, autorise decollage piste ' + rwy
 
 		elif regle == 'V':
@@ -596,7 +621,7 @@ def ajouterClearance():
 					indexAvion = i
 					break
 			if avionPresent == True:
-				creerClearance(indexAvion)
+				creerClearance(indexAvion,position)
 				break
 			else:
 				print("\nAVION INTROUVABLE...")
