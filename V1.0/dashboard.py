@@ -270,14 +270,14 @@ def creerClearance(avion,position):
 			taxiRoute = input('Taxi? ')
 			avion.append(taxiRoute)
 			if destination == 'CYUL':	### ---------- A modifier pour l'examen ACC ---------- ###
-				if runway == '24L' or runway == '06L': 
+				if rwy == '24L' or rwy == '06L': 
 					if langue == 'EN':
 						clearance_txt = nom+', right hand pattern '+flightLevel+', squawk '+squawk+' taxi holding point runway '+rwy+' via '+taxiRoute
 					
 					elif langue == 'FR':
 						clearance_txt = nom+', tour de piste main droite a '+flightLevel+' pieds, squawk '+squawk+" taxi point d'arret piste "+rwy+' via '+taxiRoute 
 				
-				elif runway == '06R' or runway  == '24R':
+				elif rwy == '06R' or rwy  == '24R':
 					if langue == 'EN':
 						clearance_txt = nom+', left hand pattern '+flightLevel+', squawk '+ squawk+'taxi holding point runway '+rwy+' via '+taxiRoute
                     
@@ -311,7 +311,7 @@ def creerClearance(avion,position):
 			clearance_txt = nom+', runway '+rwy+', altimeter '+altimetre+ ', taxi '+taxiRoute+', hold short '+rwy+', report ready for takeoff'
             
 		elif langue == 'FR':
-			clearance_txt = nom + ', piste ' + rwy + ', altimetre ' + altimetre + ', taxi ' + taxiRoute + ", restez a l'ecart piste " + piste + ', rappelez pret a decoller' 
+			clearance_txt = nom + ', piste ' + rwy + ', altimetre ' + altimetre + ', taxi ' + taxiRoute + ", restez a l'ecart piste " + rwy + ', rappelez pret a decoller' 
 
 		clearance = 'TAXI'
 
@@ -338,7 +338,7 @@ def creerClearance(avion,position):
 				clearance_txt = nom+' monitor unicom on '+frequenceDepart+' airborne, cleared for takeoff runway '+rwy
 				
 			elif langue == 'FR' and frequenceDepart == '122.8':
-				clearance_txt = nom + ', contactez Montreal departs sur ' + frequenceDepart + ' en vol, autorise decollage piste ' + rwy
+				clearance_txt = nom + ', syntonisez UNICOM sur ' + frequenceDepart + ' en vol, autorise decollage piste ' + rwy
 
 		elif regle == 'V':
 			if rwy == '06R' or rwy == '24R':
@@ -350,7 +350,7 @@ def creerClearance(avion,position):
 
 			elif rwy == '06L' or rwy == '24L':
 				if langue == 'EN':
-					clearance_txt = nom + 'report left hand downwind runway '+rwy+', cleared for takeoff, winds [VENTS]'
+					clearance_txt = nom + ' report left hand downwind runway '+rwy+', cleared for takeoff, winds [VENTS]'
 				
 				elif langue == 'FR':
 					clearance_txt = nom+ ' rappelez downwind main gauche '+rwy+', autorise decollage, vents [VENTS]'
@@ -369,10 +369,10 @@ def creerClearance(avion,position):
 			position = input('Quelle position? ')
 			
 			if position == '1':
-				print ('1. Report end of Downwind')
-				print ('2. Downwind -> Final')
-				print ('3. Extend Downwind')
-				position2 = input('Quelle clearance?')
+				print ('1. Rappelez fin de downwind')
+				print ('2. Downwind -> Finale')
+				print ('3. Allongez Downwind ')
+				position2 = input('Quelle clearance? ')
 				
 				#Report end of downwind
 				if position2 == '1':
@@ -392,7 +392,7 @@ def creerClearance(avion,position):
 						clearance_txt = nom + ', report on final runway ' +rwy+', number ' + numero
 						
 					elif langue == 'FR':
-						clearance_txt = nom + ', report on final runway ' + rwy + ',numero ' + numero
+						clearance_txt = nom + ', report on final runway ' + rwy + ', numero ' + numero
 										
 					clearance = 'FINL'
 				
@@ -631,6 +631,9 @@ def ajouterClearance():
 	else:
 		print("\nAUCUN AVION DANS LA LISTE")
 
+def atc():
+        print ('ATC')
+
 
 #### ===== ----- ===== ----- ===== ----- ===== ----- PROGRAMME PRINCIPAL ----- ===== ----- ===== ----- ===== ----- =====
 remplirSquawk()
@@ -644,7 +647,8 @@ while True:
 	print("\n1. Ajouter un avion")
 	print("2. Ajouter clearance a un avion")
 	print("3. Supprimer")
-	print("4. Quitter")
+	print("4. ATC / Frequences")
+	print("5. Quitter")
 	choix = input("Que veux-tu faire? ")
 
     #AJOUTER UN AVION
@@ -659,8 +663,11 @@ while True:
 	elif choix == '3':
 		supprimerAvion()
 
-    #QUITTER
 	elif choix == '4':
+                print ('ATC')
+
+    #QUITTER
+	elif choix == '5':
 		quitter = input("Voulez vous vraiment quitter? (Y / N) ")
 		if quitter == 'Y' or quitter == 'y':
 			print("\nEXIT")
