@@ -1,6 +1,8 @@
 import os
 from sys import platform
 from datetime import datetime
+from bs4 import BeautifulSoup
+import urllib.request
 listeAvions = []
 squawk = []
 compagnies = []
@@ -10,6 +12,7 @@ francais = []
 frequenceDepart = input('Frequence de depart: ')
 position = []
 fir = []
+metar = []
 
 
 
@@ -19,6 +22,7 @@ fir = []
 
 def position():
 	position = []
+	aeroport_pos = input('Quel est lecode OACI de l\'aeroport / de la FIR? ') 
 	while position != '1' and position != '2' and position != '3' and position != '4' and position != '5' and position != '6':
 		print ('1. XXXX_DEL')
 		print ('2. XXXX_GND')
@@ -27,9 +31,35 @@ def position():
 		print ('5. XXXX_APP')
 		print ('6. XXXX_CTR')
 		position = input('Quelle position? ')
-	return position	
+	return (position, aeroport_pos)
+(position,aeroport_pos) = position()
 
-position = position()
+def afficherMetar(aeroport_pos):
+    webpage = "https://aviationweather.gov/adds/tafs/?station_ids="+aeroport_pos+"&std_trans=translated&submit_both=Get+TAFs+and+METARs"
+    websource = urllib.request.urlopen(webpage)
+    soup = BeautifulSoup(websource.read(), "html.parser")
+    all = soup.find_all("strong", {"id": ""})
+    raw_data = all[1]
+    metar_html = str(raw_data).split("<strong>")
+    metar_html = metar_html[1].split("</strong>")
+    metar_RMK = metar_html[0].split("RMK")
+    metar_full = (metar_RMK[0])
+    print (metar_full)
+
+def metar():
+    webpage = "https://aviationweather.gov/adds/tafs/?station_ids="+aeroport_pos+"&std_trans=translated&submit_both=Get+TAFs+and+METARs"
+    websource = urllib.request.urlopen(webpage)
+    soup = BeautifulSoup(websource.read(), "html.parser")
+    all = soup.find_all("strong", {"id": ""})
+    raw_data = all[1]
+    metar_html = str(raw_data).split("<strong>")
+    metar_html = metar_html[1].split("</strong>")
+    metar_RMK = metar_html[0].split("RMK")
+    metar_full = (metar_RMK[0])
+    metar = metar_full.split(' ')
+    return metar[:8]
+
+
 
 def affichage(position):
 	if position == '1':
@@ -668,6 +698,7 @@ remplirDictionnaire("dictionnaires/aeroports", aeroports)
 
 while True:
 	print("\n\n================== PROGRAMME PRINCIPAL ==================\n")
+	afficherMetar(aeroport_pos)
 	afficherListeAvions()
 	print("\n1. Ajouter un avion")
 	print("2. Ajouter clearance a un avion")
