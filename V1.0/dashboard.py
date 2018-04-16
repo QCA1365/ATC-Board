@@ -44,7 +44,11 @@ def afficherMetar(aeroport_pos):
     metar_html = metar_html[1].split("</strong>")
     metar_RMK = metar_html[0].split("RMK")
     metar_full = (metar_RMK[0])
-    print (metar_full)
+    if metar_full.split(' ').upper() == metar_full.split(' '):
+        print (metar_full)
+    
+    else:
+        print ('Metar Non-Disponible')
 
 def metar():
     webpage = "https://aviationweather.gov/adds/tafs/?station_ids="+aeroport_pos+"&std_trans=translated&submit_both=Get+TAFs+and+METARs"
