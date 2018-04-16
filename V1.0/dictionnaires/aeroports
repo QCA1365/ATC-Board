@@ -1,3 +1,4 @@
+CYUL,Montreal-Pierre-Eliott-Trudeau International Airport 
 CYYZ,Toronto Lester B Pearson
 CYVR,Vancouver International Airport
 CYYC,Calgary International Airport
@@ -26,9 +27,13 @@ KIAD,Washington Dulles
 KCLT,Charlotte Douglas
 KSFO,San Francisco
 KSEA,Seattle-Tacoma
+KBOS,Boston Logan international Airport
+KTEB,Teterboro International Airport
+KFTW,Dallas Fort Worth International
 KATL,Atlanta Hartsfield
 MPTO,Panama Tocumen
 MUHA,Havana Jose Marti
+MDPC,Punta Cana
 LFLL,Lyon Saint-Exupery
 LFPO,Paris-Orly
 LFPG,Paris Charles DeGaulle
@@ -38,6 +43,7 @@ EGSS,London Stansted International Airport
 EGLL,London Heathrow
 EGKK,London Gatwick
 SKBO,Bogota International
+SKRG,Medellin Rionegro international Airport
 SBGR,Sao Paulo International Airport
 SBGL,Rio de Janeiro Galeao
 MMMX,Mexico International
@@ -50,3 +56,20 @@ RJAA,Tokyo-Narita
 VHHH,Hong-Kong
 KTEB,Teterboro
 LFMN,Nice Cote d'Azur
+LFLS,Grenoble Isère
+LTBA,Istanbul Ataturk International Airport
+BIKF,Rekjavik-Keflavik International Airport
+KDEN,Denver International Airport
+KLAS,Las Vegas Mc Carran International Airport
+RCTP,Taipei International Airport
+MYNN,Nassau International Airport
+SPJC,Lima International Airport
+LFBO,Toulouse Blagnac
+LFRS,Nantes Atlantique
+LEMD,Madrid
+LKPR,Prague
+LOWW,Vienna
+LOWI,Innsbruck
+LGAV,Athens
+LBSF,Sofia
+FMEE,Saint-Denis
