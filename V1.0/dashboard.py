@@ -197,24 +197,45 @@ def supprimerAvion():
 		print("\n\n====================== SUPPRESSION ======================\n")
         
 		avionSuppr = input("Quel avion veux-tu supprimer? ").upper()
-		avionPresent = False
-		indexAvion = []
-		for i in listeAvions:
-			if i[0] == avionSuppr:
-				avionPresent = True
-				indexAvion = i
-				break
-		if avionPresent == True:
-			squawkAvion = indexAvion[7]+1000
-			for j in squawk:
-				if squawkAvion == j:
-					indice = squawk.index(j)
-					squawk[indice] -= 1000
-					break
-			listeAvions.remove(indexAvion)
-			print("\nSUPPRESSION DE L'AVION...")
+		if avionSuppr != "":
+
+			#SUPPRESSION PAR INDEX
+			if int(avionSuppr) > 0 and int(avionSuppr) <= len(listeAvions): 
+				avion = listeAvions[int(avionSuppr)-1]
+				squawkAvion = avion[7]+1000
+				for j in squawk:
+					if squawkAvion == j:
+						indice = squawk.index(j)
+						squawk[indice] -= 1000
+						break
+				listeAvions.remove(avion)
+				print("\nSUPPRESSION DE L'AVION...")
+
+			else:
+				print("\nAVION INTROUVABLE...")
+
+			#SUPPRESSION PAR CALLSIGN
+			"""else:
+				avionPresent = False 
+    			indexAvion = [] 
+    			for i in listeAvions: 
+      				if i[0] == avionSuppr: 
+        			avionPresent = True 
+        			indexAvion = i 
+        			break 
+				if avionPresent == True: 
+					squawkAvion = indexAvion[7]+1000 
+					for j in squawk: 
+						if squawkAvion == j: 
+						indice = squawk.index(j) 
+						squawk[indice] -= 1000 
+						break 
+					listeAvions.remove(indexAvion) 
+					print("\nSUPPRESSION DE L'AVION...")"""
+
 		else:
 			print("\nAVION INTROUVABLE...")
+	
 	else:
 		print("\nAUCUN AVION A SUPPRIMER")
 
