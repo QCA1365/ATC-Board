@@ -12,7 +12,9 @@ def metar():
     metar_RMK = metar_html[0].split("RMK")
     metar_full = (metar_RMK[0])
     print (metar_full)
+    metar.replace("\n", "")
     metar = metar_full.split(' ')
-    return metar[:8]
+    return metar
 
 metar = metar()
+print (metar)

@@ -35,33 +35,37 @@ def position():
 (position,aeroport_pos) = position()
 
 def afficherMetar(aeroport_pos):
-    webpage = "https://aviationweather.gov/adds/tafs/?station_ids="+aeroport_pos+"&std_trans=translated&submit_both=Get+TAFs+and+METARs"
-    websource = urllib.request.urlopen(webpage)
-    soup = BeautifulSoup(websource.read(), "html.parser")
-    all = soup.find_all("strong", {"id": ""})
-    raw_data = all[1]
-    metar_html = str(raw_data).split("<strong>")
-    metar_html = metar_html[1].split("</strong>")
-    metar_RMK = metar_html[0].split("RMK")
-    metar_full = (metar_RMK[0])
-    if metar_full.split(' ').upper() == metar_full.split(' '):
-        print (metar_full)
-    
-    else:
-        print ('Metar Non-Disponible')
+	webpage = "https://aviationweather.gov/adds/tafs/?station_ids="+aeroport_pos+"&std_trans=translated&submit_both=Get+TAFs+and+METARs"
+	websource = urllib.request.urlopen(webpage)
+	soup = BeautifulSoup(websource.read(), "html.parser")
+	all = soup.find_all("strong", {"id": ""})
+	raw_data = all[1]
+	metar_html = str(raw_data).split("<strong>")
+	metar_html = metar_html[1].split("</strong>")
+	metar_RMK = metar_html[0].split("RMK")
+	metar_full = (metar_RMK[0])
+	if metar_full.upper() == metar_full:
+		print (metar_full.replace("\n", ""))
+
+	else:
+		print ('Metar Non-Disponible')
 
 def metar():
-    webpage = "https://aviationweather.gov/adds/tafs/?station_ids="+aeroport_pos+"&std_trans=translated&submit_both=Get+TAFs+and+METARs"
-    websource = urllib.request.urlopen(webpage)
-    soup = BeautifulSoup(websource.read(), "html.parser")
-    all = soup.find_all("strong", {"id": ""})
-    raw_data = all[1]
-    metar_html = str(raw_data).split("<strong>")
-    metar_html = metar_html[1].split("</strong>")
-    metar_RMK = metar_html[0].split("RMK")
-    metar_full = (metar_RMK[0])
-    metar = metar_full.split(' ')
-    return metar[:8]
+	webpage = "https://aviationweather.gov/adds/tafs/?station_ids="+aeroport_pos+"&std_trans=translated&submit_both=Get+TAFs+and+METARs"
+	websource = urllib.request.urlopen(webpage)
+	soup = BeautifulSoup(websource.read(), "html.parser")
+	all = soup.find_all("strong", {"id": ""})
+	raw_data = all[1]
+	metar_html = str(raw_data).split("<strong>")
+	metar_html = metar_html[1].split("</strong>")
+	metar_RMK = metar_html[0].split("RMK")
+	metar_full = (metar_RMK[0])
+	metar = metar_full.split(' ')	
+	if metar_full.upper() == metar_full:
+		print (metar_full.replace("\n", ""))
+	else:
+		print ('Metar Non-Disponible')
+	return metar.replace("\n", "")
 
 
 
@@ -363,7 +367,7 @@ def creerClearance(avion,position):
         
 	#Clearance Taxi
 	elif typeClearance == '3':
-		altimetre = input('QNH? ')
+		altimetre = metar[8]
 		taxiRoute = input('Taxi? ')
 		avion.append(taxiRoute)
 		if langue == 'EN':
@@ -468,7 +472,8 @@ def creerClearance(avion,position):
 					clearance = 'EXTD'
 					
 			if position == '2':
-				altimetre = input('QNH? ')
+				metar = metar()
+				altimetre = metar[9]
 				print ('1. approche straight-in')
 				print ('2. fin de downwind')
 				print ('3. VFR entry-point')
@@ -701,6 +706,7 @@ remplirDictionnaire("dictionnaires/aeroports", aeroports)
 #remplirDictionnaire("dictionnaires/positions", position)
 
 while True:
+	metar = []
 	print("\n\n================== PROGRAMME PRINCIPAL ==================\n")
 	afficherMetar(aeroport_pos)
 	afficherListeAvions()
