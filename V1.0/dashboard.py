@@ -63,9 +63,11 @@ def metar():
 	metar = metar_full.split(' ')	
 	if metar_full.upper() == metar_full:
 		print (metar_full.replace("\n", ""))
+		
+		metar.append(vents.upper())
+		metar.append(altimetre.upper())
 	else:
-		print ('Metar Non-Disponible')
-	return metar.replace("\n", "")
+		print ('Metar Non-Disponible')  
 
 
 
@@ -280,6 +282,7 @@ def supprimerAvion():
 
 #CREER UNE CLEARANCE
 def creerClearance(avion,position):
+	afficherMetar(aeroport_pos)
 	affichage(position)
 	typeClearance = input('Quelle clearance veux-tu donner? ')
 
@@ -367,7 +370,9 @@ def creerClearance(avion,position):
         
 	#Clearance Taxi
 	elif typeClearance == '3':
-		altimetre = metar[8]
+		altimetre = input('QNH? ')
+		metar = metar()
+#		altimetre = metar[8]
 		taxiRoute = input('Taxi? ')
 		avion.append(taxiRoute)
 		if langue == 'EN':
@@ -472,8 +477,10 @@ def creerClearance(avion,position):
 					clearance = 'EXTD'
 					
 			if position == '2':
-				metar = metar()
-				altimetre = metar[9]
+
+				altimetre = input('QNH? ')
+				#metar = metar()
+				#altimetre = metar[9]
 				print ('1. approche straight-in')
 				print ('2. fin de downwind')
 				print ('3. VFR entry-point')
