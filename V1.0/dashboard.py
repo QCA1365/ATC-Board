@@ -8,7 +8,9 @@ aeroports = []
 anglais = []
 francais = []
 frequenceDepart = input('Frequence de depart: ')
-nom_controle = []
+position = []
+fir = []
+
 
 
 #Cette section est inutile pour le moment... Doit etre incorporee dans les structures plus basses
@@ -26,6 +28,8 @@ def position():
 		print ('6. XXXX_CTR')
 		position = input('Quelle position? ')
 	return position	
+
+position = position()
 
 def affichage(position):
 	if position == '1':
@@ -635,11 +639,11 @@ def atc():
         print ('ATC')
 
 
-#### ===== ----- ===== ----- ===== ----- ===== ----- PROGRAMME PRINCIPAL ----- ===== ----- ===== ----- ===== ----- =====
+#### ===== ----- ===== ----- ===== ----- ===== ----- PROGRAMME PRINCIPAL ----- ===== ----- ===== ----- ===== ----- =====  ####
 remplirSquawk()
 remplirDictionnaire("dictionnaires/compagnies", compagnies)
 remplirDictionnaire("dictionnaires/aeroports", aeroports)
-position = position()
+#remplirDictionnaire("dictionnaires/positions", position)
 
 while True:
 	print("\n\n================== PROGRAMME PRINCIPAL ==================\n")
@@ -662,7 +666,8 @@ while True:
     #SUPPRIMER UN AVION   
 	elif choix == '3':
 		supprimerAvion()
-
+		
+    #Modifier ATC
 	elif choix == '4':
                 print ('ATC')
 
