@@ -12,9 +12,14 @@ francais = []
 frequenceDepart = input('Frequence de depart: ')
 position = []
 fir = []
-metar = []
 
 
+
+def platform():
+        if platform == "linux" or platform == "linux2":
+                os.system('clear')
+        elif platform == "win32":
+                os.system('CLS')
 
 #Cette section est inutile pour le moment... Doit etre incorporee dans les structures plus basses
 #Entres autres dans des options a ajouter eventuellement telles que aeroport d'arrivee
@@ -22,7 +27,7 @@ metar = []
 
 def position():
 	position = []
-	aeroport_pos = input('Quel est lecode OACI de l\'aeroport / de la FIR? ') 
+	aeroport_pos = input('Quel est le code OACI de l\'aeroport / de la FIR? ') 
 	while position != '1' and position != '2' and position != '3' and position != '4' and position != '5' and position != '6':
 		print ('1. XXXX_DEL')
 		print ('2. XXXX_GND')
@@ -32,9 +37,10 @@ def position():
 		print ('6. XXXX_CTR')
 		position = input('Quelle position? ')
 	return (position, aeroport_pos)
+
 (position,aeroport_pos) = position()
 
-def afficherMetar(aeroport_pos):
+def affichermeteo(aeroport_pos):
 	webpage = "https://aviationweather.gov/adds/tafs/?station_ids="+aeroport_pos+"&std_trans=translated&submit_both=Get+TAFs+and+METARs"
 	websource = urllib.request.urlopen(webpage)
 	soup = BeautifulSoup(websource.read(), "html.parser")
@@ -50,24 +56,28 @@ def afficherMetar(aeroport_pos):
 	else:
 		print ('Metar Non-Disponible')
 
-def metar():
-	webpage = "https://aviationweather.gov/adds/tafs/?station_ids="+aeroport_pos+"&std_trans=translated&submit_both=Get+TAFs+and+METARs"
-	websource = urllib.request.urlopen(webpage)
-	soup = BeautifulSoup(websource.read(), "html.parser")
-	all = soup.find_all("strong", {"id": ""})
-	raw_data = all[1]
-	metar_html = str(raw_data).split("<strong>")
-	metar_html = metar_html[1].split("</strong>")
-	metar_RMK = metar_html[0].split("RMK")
-	metar_full = (metar_RMK[0])
-	metar = metar_full.split(' ')	
-	if metar_full.upper() == metar_full:
-		print (metar_full.replace("\n", ""))
-		
-		metar.append(vents.upper())
-		metar.append(altimetre.upper())
-	else:
-		print ('Metar Non-Disponible')  
+def meteo(aeroport_pos):
+        webpage = "https://aviationweather.gov/adds/tafs/?station_ids="+aeroport_pos+"&std_trans=translated&submit_both=Get+TAFs+and+METARs"
+        websource = urllib.request.urlopen(webpage)
+        soup = BeautifulSoup(websource.read(), "html.parser")
+        all = soup.find_all("strong", {"id": ""})
+        raw_data = all[1]
+        metar_html = str(raw_data).split("<strong>")
+        metar_html = metar_html[1].split("</strong>")
+        metar_RMK = metar_html[0].split("RMK")
+        metar_full = (metar_RMK[0])
+        metar = metar_full.split(' ')
+        if metar_full.upper() == metar_full:
+                vents = metar[2]
+                for i in metar:
+                        if i != "":
+                                if i[0] == 'A' or i[0] == 'Q':
+                                        altimetre = i[1:]
+                                        break
+                    
+                return (vents , altimetre)
+        else:
+                print ('Metar Non-Disponible')  
 
 
 
@@ -97,7 +107,7 @@ def affichage(position):
 	
 def frequences():
 	nom_controle = input('Quel est le code du controleur? ')
-	frequence_controle = input('Quelle est la frquence du controleur')
+	frequence_controle = input('Quelle est la frequence du controleur')
 	
 
 #REMPLIR SQUAWK
@@ -282,7 +292,7 @@ def supprimerAvion():
 
 #CREER UNE CLEARANCE
 def creerClearance(avion,position):
-	afficherMetar(aeroport_pos)
+	affichermeteo(aeroport_pos)
 	affichage(position)
 	typeClearance = input('Quelle clearance veux-tu donner? ')
 
@@ -370,9 +380,7 @@ def creerClearance(avion,position):
         
 	#Clearance Taxi
 	elif typeClearance == '3':
-		altimetre = input('QNH? ')
-		metar = metar()
-#		altimetre = metar[8]
+		(vents, altimetre) = meteo(aeroport_pos)
 		taxiRoute = input('Taxi? ')
 		avion.append(taxiRoute)
 		if langue == 'EN':
@@ -478,9 +486,7 @@ def creerClearance(avion,position):
 					
 			if position == '2':
 
-				altimetre = input('QNH? ')
-				#metar = metar()
-				#altimetre = metar[9]
+				(vents, altimetre) = meteo(aeroport_pos)
 				print ('1. approche straight-in')
 				print ('2. fin de downwind')
 				print ('3. VFR entry-point')
@@ -673,34 +679,31 @@ def creerClearance(avion,position):
 #AJOUTER UNE CLEARANCE A UN AVION
 def ajouterClearance():
 	if len(listeAvions) > 0:
-		if platform == "linux" or platform == "linux2":
-			os.system('clear')
-		elif platform == "win32":
-			os.system('CLS')
+                platform()
 		while True:
-			print("\n\n================== CLEARANCE ==================\n")
-			afficherListeAvions()
+                        print("\n\n================== CLEARANCE ==================\n")
+                        afficherListeAvions()
+                        avionClearance = input("\nA quel avion veux-tu ajouter une clearance? ").upper()
+                        avionPresent = False
+                        indexAvion = []
+                        for i in listeAvions:
+                                if i[0] == avionClearance:
+                                        avionPresent = True
+                                        indexAvion = i
+                                        break
 
-			avionClearance = input("\nA quel avion veux-tu ajouter une clearance? ").upper()
-			avionPresent = False
-			indexAvion = []
-			for i in listeAvions:
-				if i[0] == avionClearance:
-					avionPresent = True
-					indexAvion = i
-					break
-			if avionPresent == True:
-				creerClearance(indexAvion,position)
-				break
-			else:
-				print("\nAVION INTROUVABLE...")
-				input('')
-				if platform == "linux" or platform == "linux2":
-					os.system('clear')
-				elif platform == "win32":
-					os.system('CLS')
-	else:
-		print("\nAUCUN AVION DANS LA LISTE")
+                        if avionPresent == True:
+                                creerClearance(indexAvion,position)
+                                break
+                        else:
+                                print("\nAVION INTROUVABLE...")
+                                input(' ')
+                                if platform == "linux" or platform == "linux2":
+                                        os.system('clear')
+                                elif platform == "win32":
+                                        os.system('CLS')
+        else:
+                print("\nAUCUN AVION DANS LA LISTE")
 
 def atc():
         print ('ATC')
@@ -715,7 +718,7 @@ remplirDictionnaire("dictionnaires/aeroports", aeroports)
 while True:
 	metar = []
 	print("\n\n================== PROGRAMME PRINCIPAL ==================\n")
-	afficherMetar(aeroport_pos)
+	affichermeteo(aeroport_pos)
 	afficherListeAvions()
 	print("\n1. Ajouter un avion")
 	print("2. Ajouter clearance a un avion")
