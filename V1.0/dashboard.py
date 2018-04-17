@@ -14,12 +14,11 @@ position = []
 fir = []
 
 
-
-def platform():
-        if platform == "linux" or platform == "linux2":
-                os.system('clear')
-        elif platform == "win32":
-                os.system('CLS')
+def platforme():
+	if platform == "linux" or platform == "linux2":
+		os.system('clear')
+	elif platform == "win32":
+		os.system('CLS')
 
 #Cette section est inutile pour le moment... Doit etre incorporee dans les structures plus basses
 #Entres autres dans des options a ajouter eventuellement telles que aeroport d'arrivee
@@ -679,35 +678,30 @@ def creerClearance(avion,position):
 #AJOUTER UNE CLEARANCE A UN AVION
 def ajouterClearance():
 	if len(listeAvions) > 0:
-                platform()
+		platforme()
 		while True:
-                        print("\n\n================== CLEARANCE ==================\n")
-                        afficherListeAvions()
-                        avionClearance = input("\nA quel avion veux-tu ajouter une clearance? ").upper()
-                        avionPresent = False
-                        indexAvion = []
-                        for i in listeAvions:
-                                if i[0] == avionClearance:
-                                        avionPresent = True
-                                        indexAvion = i
-                                        break
-
-                        if avionPresent == True:
-                                creerClearance(indexAvion,position)
-                                break
-                        else:
-                                print("\nAVION INTROUVABLE...")
-                                input(' ')
-                                if platform == "linux" or platform == "linux2":
-                                        os.system('clear')
-                                elif platform == "win32":
-                                        os.system('CLS')
-        else:
-                print("\nAUCUN AVION DANS LA LISTE")
+			print("\n\n================== CLEARANCE ==================\n")
+			afficherListeAvions()
+			avionClearance = input("\nA quel avion veux-tu ajouter une clearance? ").upper()
+			avionPresent = False
+			indexAvion = []
+			for i in listeAvions:
+				if i[0] == avionClearance:
+					avionPresent = True
+					indexAvion = i
+					break
+			if avionPresent == True:
+				creerClearance(indexAvion,position)
+				break
+			else:
+				print("\nAVION INTROUVABLE...")
+				input(' ')
+				platforme()
+	else:
+		print("\nAUCUN AVION DANS LA LISTE")
 
 def atc():
-        print ('ATC')
-
+	print ('ATC')
 
 #### ===== ----- ===== ----- ===== ----- ===== ----- PROGRAMME PRINCIPAL ----- ===== ----- ===== ----- ===== ----- =====  ####
 remplirSquawk()
