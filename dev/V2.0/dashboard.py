@@ -15,8 +15,6 @@ fir = []
 
 
 def platform():
-	import os
-	from sys import platform
 	if platform == "linux" or platform == "linux2":
 		os.system('clear')
 	elif platform == "win32":
