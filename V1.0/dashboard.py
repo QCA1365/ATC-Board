@@ -631,9 +631,6 @@ def ajouterClearance():
 	else:
 		print("\nAUCUN AVION DANS LA LISTE")
 
-def atc():
-        print ('ATC')
-
 
 #### ===== ----- ===== ----- ===== ----- ===== ----- PROGRAMME PRINCIPAL ----- ===== ----- ===== ----- ===== ----- =====
 remplirSquawk()
@@ -647,8 +644,7 @@ while True:
 	print("\n1. Ajouter un avion")
 	print("2. Ajouter clearance a un avion")
 	print("3. Supprimer")
-	print("4. ATC / Frequences")
-	print("5. Quitter")
+	print("4. Quitter")
 	choix = input("Que veux-tu faire? ")
 
     #AJOUTER UN AVION
@@ -663,11 +659,8 @@ while True:
 	elif choix == '3':
 		supprimerAvion()
 
-	elif choix == '4':
-                print ('ATC')
-
     #QUITTER
-	elif choix == '5':
+	elif choix == '4':
 		quitter = input("Voulez vous vraiment quitter? (Y / N) ")
 		if quitter == 'Y' or quitter == 'y':
 			print("\nEXIT")
