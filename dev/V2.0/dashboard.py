@@ -67,12 +67,16 @@ def meteo(aeroport_pos):
         metar_full = (metar_RMK[0])
         metar = metar_full.split(' ')
         if metar_full.upper() == metar_full:
-                vents = metar[2]
+                for i in metar:
+                	if i[-2:] == 'KT':
+                		vents = i
+                		break
+                	
                 for i in metar:
                         if i != "":
-                                if i[0] == 'A' or i[0] == 'Q':
-                                        altimetre = i[1:]
-                                        break
+                        	if i[0] == 'A' or i[0] == 'Q':
+                        		altimetre = i[1:]
+                        		break
                     
                 return (vents , altimetre)
         else:
@@ -294,7 +298,7 @@ def creerClearance(avion,position):
 	affichermeteo(aeroport_pos)
 	affichage(position)
 	typeClearance = input('Quelle clearance veux-tu donner? ')
-
+	(vents, altimetre) = meteo(aeroport_pos)
 	longueurNom = len(avion[0])
 	langue = avion[1]
 	regle = avion[3]
@@ -379,7 +383,6 @@ def creerClearance(avion,position):
         
 	#Clearance Taxi
 	elif typeClearance == '3':
-		(vents, altimetre) = meteo(aeroport_pos)
 		taxiRoute = input('Taxi? ')
 		avion.append(taxiRoute)
 		if langue == 'EN':
@@ -418,17 +421,17 @@ def creerClearance(avion,position):
 		elif regle == 'V':
 			if rwy == '06R' or rwy == '24R':
 				if langue == 'EN':
-					clearance_txt = nom+ ' report right hand downwind runway '+rwy+', cleared for takeoff, winds [VENTS]'
+					clearance_txt = nom+ ' report right hand downwind runway '+rwy+', cleared for takeoff, winds '+vents
 
 				elif langue == 'FR':
-					clearance_txt = nom+ ' rappelez downwind main droite '+rwy+', autorise decollage, vents [VENTS]'
+					clearance_txt = nom+ ' rappelez downwind main droite '+rwy+', autorise decollage, vents '+vents
 
 			elif rwy == '06L' or rwy == '24L':
 				if langue == 'EN':
-					clearance_txt = nom + ' report left hand downwind runway '+rwy+', cleared for takeoff, winds [VENTS]'
+					clearance_txt = nom + ' report left hand downwind runway '+rwy+', cleared for takeoff, winds '+vents
 				
 				elif langue == 'FR':
-					clearance_txt = nom+ ' rappelez downwind main gauche '+rwy+', autorise decollage, vents [VENTS]'
+					clearance_txt = nom+ ' rappelez downwind main gauche '+rwy+', autorise decollage, vents '+vents
 
 		clearance = 'TKOF'
 
@@ -494,10 +497,10 @@ def creerClearance(avion,position):
 				#Approche Straight-In
 				if position2 == '1':
 					if langue == 'EN':
-						clearance_txt = nom + ', make straight-in approach runway ' + rwy + ', winds [VENTS], altimeter ' + altimetre
+						clearance_txt = nom + ', make straight-in approach runway ' + rwy + ', winds '+vents+', altimeter ' + altimetre
 					
 					elif langue == 'FR':
-						clearance_txt = nom + ', faites une approche directe piste ' + rwy + ', vents [VENTS], altimetre ' + altimetre
+						clearance_txt = nom + ', faites une approche directe piste ' + rwy + ', vents '+vents+', altimetre ' + altimetre
 					
 					clearance = 'APPR'
 				
@@ -522,34 +525,34 @@ def creerClearance(avion,position):
 					if cote == '1':
 						if rwy == '06R' or rwy == '24R':
 							if langue == 'EN':
-								clearance_txt = nom + ', join left hand downwind runway ' + rwy + ', wind [VENTS], altimeter ' + altimetre
+								clearance_txt = nom + ', join left hand downwind runway ' + rwy + ', wind '+vents+', altimeter ' + altimetre
 							
 							elif langue == 'FR':
-								clearance_txt = nom + ', rejoignez downwind main gauche ' + rwy + ', vents [VENTS], altimetre ' + altimetre
+								clearance_txt = nom + ', rejoignez downwind main gauche ' + rwy + ', vents '+vents+', altimetre ' + altimetre
 							
 							clearance = 'LHDW'
 						
 						elif rwy == '24L' or rwy == '24L':
 							if langue == 'EN':
-								clearance_txt = nom + ', join right hand downwind runway ' + rwy + ', wind [VENTS], altimeter ' + altimetre
+								clearance_txt = nom + ', join right hand downwind runway ' + rwy + ', wind '+vents+', altimeter ' + altimetre
 							
 							elif langue == 'FR':
-								clearance_txt = nom + ', rejoignez downwind main gauche piste ' + rwy + ', vents [VENTS], altimetre ' + altimetre
+								clearance_txt = nom + ', rejoignez downwind main gauche piste ' + rwy + ', vents '+vents+', altimetre ' + altimetre
 							
 							clearance = 'RHDW'
 					
 					elif cote == '2':
 						if rwy == '06R' or rwy == '24R':
 							if langue == 'EN':
-								clearance_txt = nom + ', join right hand downwind runway ' + rwy + ', wind [VENTS], altimeter ' + altimetre
+								clearance_txt = nom + ', join right hand downwind runway ' + rwy + ', wind '+vents+', altimeter ' + altimetre
 							clearance = 'RHDW'
 						
 						elif rwy == '24L' or rwy == '06L':
 							if langue == 'EN':
-								clearance_txt = nom + ', join left hand downwind runway ' + rwy + ', wind [VENTS], altimeter ' + altimetre
+								clearance_txt = nom + ', join left hand downwind runway ' + rwy + ', wind '+vents+', altimeter ' + altimetre
 
 							elif langue == 'FR':
-								clearance_txt = nom + ', rejoignez downwind main gauche ' + rwy + ', vents [VENTS], altimetre ' + altimetre
+								clearance_txt = nom + ', rejoignez downwind main gauche ' + rwy + ', vents '+vents+', altimetre ' + altimetre
 							
 							clearance = 'LHDW'
 
@@ -567,40 +570,40 @@ def creerClearance(avion,position):
 		if operation == '1':
 			sortie = input('Quelle sortie? ')
 			if langue == 'EN':
-				clearance_txt = nom + ', winds [VENTS], exit at ' + sortie + ', cleared to land runway ' + rwy
+				clearance_txt = nom + ', winds '+vents+', exit at ' + sortie + ', cleared to land runway ' + rwy
 			
 			elif langue  == 'FR':
-				clearance_txt = nom + ', vents [VENTS], sortez a ' +  sortie + ', autorise a atterir piste ' + rwy
+				clearance_txt = nom + ', vents '+vents+', sortez a ' +  sortie + ', autorise a atterir piste ' + rwy
 				
 			clearance = 'LDG'+rwy
 			
 		#Touch and Go	
 		elif operation == '2':
 			if langue == 'EN':
-				clearance_txt = nom + ', runway ' + rwy + ', cleared touch and go, winds [VENTS]'
+				clearance_txt = nom + ', runway ' + rwy + ', cleared touch and go, winds '+vents
 			
 			elif langue == 'FR':
-				clearance_txt = nom + ', piste ' + rwy + ', autorise toucher, vents [VENTS]'
+				clearance_txt = nom + ', piste ' + rwy + ', autorise toucher, vents '+vents
 			
 			clearance = 'T&GO'
 		
 		#Low Pass
 		elif operation == '3':
 			if langue == 'EN':
-				clearance_txt = nom + ', cleared low pass runway ' + rwy + ', winds [VENTS]'
+				clearance_txt = nom + ', cleared low pass runway ' + rwy + ', winds '+vents
 				
 			elif langue == 'FR':
-				clearance_txt = nom + ', autorise low pass piste ' + rwy + ', winds [VENTS]'
+				clearance_txt = nom + ', autorise low pass piste ' + rwy + ', winds '+vents
 				
 			clearance = 'LOWP'
 			
 		#Stop and Go
 		elif operation == '4':
 			if langue == 'EN':
-				clearance_txt = nom + ', cleared to land runway ' + rwy + ', winds [VENTS] \n Report ready for take-off -> Donner clearance Takeoff'
+				clearance_txt = nom + ', cleared to land runway ' + rwy + ', winds '+vents+' \n Report ready for take-off -> Donner clearance Takeoff'
 			
 			if langue == 'FR':
-				clearance_txt = nom + ', autorise a atterir piste ' + rwy + ', vents [VENTS] \n Rappelez pret a decoller -> Donner clearance Takeoff'
+				clearance_txt = nom + ', autorise a atterir piste ' + rwy + ', vents '+vents+' \n Rappelez pret a decoller -> Donner clearance Takeoff'
 				 
 			clearance = 'S&GO'
 			
@@ -631,10 +634,10 @@ def creerClearance(avion,position):
 		if maniere == '1':
 			point = input('Quel est le point de rapport? ')
 			if langue == 'EN':
-				clearance_txt = nom + ', report over ' + point + ', runway ' + rwy + ', cleared for takeoff, winds [VENTS]'
+				clearance_txt = nom + ', report over ' + point + ', runway ' + rwy + ', cleared for takeoff, winds '+vents
 			
 			elif langue == 'FR':
-				clearance_txt = nom + ', rappelez a ' + point + ', piste ' +rwy+ ', autorise decollage, vents [VENTS]'
+				clearance_txt = nom + ', rappelez a ' + point + ', piste ' +rwy+ ', autorise decollage, vents '+vents
 			
 			clearance = 'TOPT'
 		
