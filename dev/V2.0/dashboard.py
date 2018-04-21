@@ -7,6 +7,7 @@ listeAvions = []
 squawk = []
 compagnies = []
 aeroports = []
+emplacement = []
 anglais = []
 francais = []
 frequenceDepart = input('Frequence de depart: ')
@@ -722,30 +723,26 @@ def ajouterATC():
 	while True:
 		endroit = input("Endroit? (XXXX): ")
 		if len(endroit) == 4:
-			"""for i in emplacement:
-                if i[0] == endroit:
+			for i in emplacement:
+				if i[0] == endroit:
+					endroit = i[1]
+					estPresent = True
+					break
+			if estPresent == True:
+				break
+		print("ENDROIT INEXISTANT\n")
+	
+	"""role = input('Role? (): ')
+	while True:
+        endroit = input("Endroit? (XXXX): ")
+        if len(endroit) == 4:
+            for i in emplacement:
+                 if i[0] == endroit:
                     endroit = i[1]
                     estPresent = True
                     break
             if estPresent == True:
-                break"""
-			
-			if endroit in emplacement[0]:
-				endroit = emplacement[0].find(endroit)
-				break
-	print (endroit)
-	
-	"""role = input('Role? (): ')
-	while True:
-            endroit = input("Endroit? (XXXX): ")
-            if len(endroit) == 4:
-                for i in emplacement:
-                    if i[0] == endroit:
-                        endroit = i[1]
-                        estPresent = True
-                        break
-                if estPresent == True:
-                    break
+                break
 	code = endroit+'_'+role
 	frequency = input('Frequence de l\'ATC?')
 	
