@@ -13,7 +13,7 @@ position = []
 anglais = []
 francais = []
 frequenceDepart = input('Frequence de depart: ')
-position = []
+positions = []
 fir = []
 
 
@@ -723,10 +723,10 @@ def ajouterATC():
 	
 	estPresent = False
 	while True:
-		endroit = input("Endroit? (XXXX): ")
-		if len(endroit) == 4:
+		endroitCode = input("Endroit? (XXXX): ")
+		if len(endroitCode) == 4:
 			for i in emplacement:
-				if i[0] == endroit:
+				if i[0] == endroitCode:
 					endroit = i[1]
 					estPresent = True
 					break
@@ -734,24 +734,24 @@ def ajouterATC():
 				break
 		print("ENDROIT INEXISTANT\n")
 	
-	remplirDictionnaire("dictionnaire/positions", position)
-	
-	estPresentPostion = False
+	remplirDictionnaire("dictionnaires/positions", positions)
+
+	estPresentPosition = False
 	while True:
-    role = input("Role? (XXX): ")
-    if len(role) == 3:
-      for i in position:
-        if i[0] == position:
-          position = i[1]
-          estPresentPosition = True
-      if estPresentPosition == True:
-        break
-    print("ROLE INEXISTANT\n")
+		positionRole = input("Role? (XXX): ")
+		if len(positionRole) == 3:
+			for i in positions:
+				if i[0] == positionRole:
+					role = i[1]
+					estPresentPosition = True
+					break
+			if estPresentPosition == True:
+				break
+		print("ROLE INEXISTANT\n")
     
-	code = endroit+'_'+role
-	nom = emplacement + ' ' + position
-	frequency = input("Frequence de l'ATC?")
-	
+	code = endroit + '_' + role
+	nom = endroitCode + ' ' + positionRole
+	frequency = input("Frequence de l'ATC? ")
 
 	ATC = []    
 	ATC.append(code)
