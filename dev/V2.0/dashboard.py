@@ -703,14 +703,107 @@ def ajouterClearance():
 	else:
 		print("\nAUCUN AVION DANS LA LISTE")
 
+#Ajout ATC
+
+def ajouterATC():
+	print("\n\n====================== NOUVEL ATC ======================\n")
+        print ('1. Aerodrome')
+        print ('2. FIR / ARTCC')
+        print ('3. FIR oceanique')
+        type = input ('Quel type? ')
+        if type == '1':
+            remplirDictionnaire("dictionnaires/aeroports", emplacement)
+        elif type == '2':
+            remplirDictionnaire("dictionnaires/FIR", emplacement)
+        elif type == '3':
+            remplirDictionnaire("dictionnaire/OCEANIC", emplacement)
+		
+        estPresent = False
+	while True:
+            endroit = input("Endroit? (XXXX): ")
+            if len(endroit) == 4:
+                """for i in emplacement:
+                    if i[0] == endroit:
+                        endroit = i[1]
+                        estPresent = True
+                        break
+                if estPresent == True:
+                    break"""
+                
+                if endroit in emplacement[0]:
+                    endroit = emplacement[0].find(endroit)
+                    break
+                
+        print (endroit)   
+           
+            
+	"""role = input('Role? (XXX): ')
+	while True:
+            endroit = input("Endroit? (XXXX): ")
+            if len(endroit) == 4:
+                for i in emplacement:
+                    if i[0] == endroit:
+                        endroit = i[1]
+                        estPresent = True
+                        break
+                if estPresent == True:
+                    break
+	code = endroit+'_'+role
+	frequency = input('Frequence de l\'ATC?')
+	
+
+	avion = []    
+	avion.append(nom.upper())
+	avion.append(langue.upper())
+	avion.append(destination.upper())
+	avion.append(regle.upper())
+	avion.append(sid.upper())
+	avion.append(rwy.upper())
+	avion.append(flightlevel)
+	avion.append(squawk)
+	avion.append(None)#clearance nulle
+    
+	listeAvions.append(avion)
+	print("\nAJOUT DE L'AVION " + nom)"""
+
+
+#SUPPRIMER UN AVION
+"""def supprimerATC():
+	if len(listeAvions) > 0:
+		print("\n\n====================== SUPPRESSION ======================\n")
+        
+		avionSuppr = input("Quel avion veux-tu supprimer? ").upper()
+		if avionSuppr != "":
+
+			#SUPPRESSION PAR INDEX
+			if int(avionSuppr) > 0 and int(avionSuppr) <= len(listeAvions): 
+				avion = listeAvions[int(avionSuppr)-1]
+				squawkAvion = avion[7]+1000
+				for j in squawk:
+					if squawkAvion == j:
+						indice = squawk.index(j)
+						squawk[indice] -= 1000
+						break
+				listeAvions.remove(avion)
+				print("\nSUPPRESSION DE L'AVION...")
+
+			else:
+				print("\nAVION INTROUVABLE...")"""
+		    
+
 def atc():
-	print ('ATC')
+	print ('1, Ajouter un ATC ')
+	print ('2. Supprimer un ATC')
+	option = input('Quelle option veux-tu choisir? ')
+	if option == '1':
+            ajouterATC()
+        if option == '2':
+            supprimerATC()
 
 #### ===== ----- ===== ----- ===== ----- ===== ----- PROGRAMME PRINCIPAL ----- ===== ----- ===== ----- ===== ----- =====  ####
 remplirSquawk()
 remplirDictionnaire("dictionnaires/compagnies", compagnies)
 remplirDictionnaire("dictionnaires/aeroports", aeroports)
-#remplirDictionnaire("dictionnaires/positions", position)
 
 while True:
 	metar = []
@@ -738,7 +831,7 @@ while True:
 		
     #Modifier ATC
 	elif choix == '4':
-                print ('ATC')
+                atc()
 
     #QUITTER
 	elif choix == '5':
