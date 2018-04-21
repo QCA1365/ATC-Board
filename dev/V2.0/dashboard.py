@@ -14,7 +14,7 @@ position = []
 fir = []
 
 
-def platform():
+def platforme(platform):
 	if platform == "linux" or platform == "linux2":
 		os.system('clear')
 	elif platform == "win32":
@@ -681,7 +681,7 @@ def creerClearance(avion,position):
 #AJOUTER UNE CLEARANCE A UN AVION
 def ajouterClearance():
 	if len(listeAvions) > 0:
-		platform()
+		platforme(platform)
 		while True:
 			print("\n\n================== CLEARANCE ==================\n")
 			afficherListeAvions()
@@ -699,7 +699,7 @@ def ajouterClearance():
 			else:
 				print("\nAVION INTROUVABLE...")
 				input(' ')
-				platform()
+				platforme(platform)
 	else:
 		print("\nAUCUN AVION DANS LA LISTE")
 
@@ -752,4 +752,4 @@ while True:
 		print("\nCHOIX INEXISTANT")
         
 	input('')
-	platform()
+	platforme(platform)
