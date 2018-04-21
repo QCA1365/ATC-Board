@@ -4,10 +4,12 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 import urllib.request
 listeAvions = []
+listeATC = []
 squawk = []
 compagnies = []
 aeroports = []
 emplacement = []
+position = []
 anglais = []
 francais = []
 frequenceDepart = input('Frequence de depart: ')
@@ -732,34 +734,31 @@ def ajouterATC():
 				break
 		print("ENDROIT INEXISTANT\n")
 	
-	"""role = input('Role? (): ')
+	remplirDictionnaire("dictionnaire/positions", position)
+	
+	estPresentPostion = False
 	while True:
-        endroit = input("Endroit? (XXXX): ")
-        if len(endroit) == 4:
-            for i in emplacement:
-                 if i[0] == endroit:
-                    endroit = i[1]
-                    estPresent = True
-                    break
-            if estPresent == True:
-                break
+    role = input("Role? (XXX): ")
+    if len(role) == 3:
+      for i in position:
+        if i[0] == position:
+          position = i[1]
+          estPresentPosition = True
+      if estPresentPosition == True:
+        break
+    print("ROLE INEXISTANT\n")
+    
 	code = endroit+'_'+role
-	frequency = input('Frequence de l\'ATC?')
+	nom = emplacement + ' ' + position
+	frequency = input("Frequence de l'ATC?")
 	
 
-	avion = []    
-	avion.append(nom.upper())
-	avion.append(langue.upper())
-	avion.append(destination.upper())
-	avion.append(regle.upper())
-	avion.append(sid.upper())
-	avion.append(rwy.upper())
-	avion.append(flightlevel)
-	avion.append(squawk)
-	avion.append(None)#clearance nulle
+	ATC = []    
+	ATC.append(code)
+	ATC.append(frequency)
     
-	listeAvions.append(avion)
-	print("\nAJOUT DE L'AVION " + nom)"""
+	listeATC.append(ATC)
+	print("\nAJOUT DE L'ATC " + nom)
 
 
 	#SUPPRIMER UN AVION
