@@ -8,8 +8,6 @@ listeATC = []
 squawk = []
 compagnies = []
 aeroports = []
-emplacement = []
-position = []
 anglais = []
 francais = []
 frequenceDepart = input('Frequence de depart: ')
@@ -22,11 +20,7 @@ def platforme(platform):
 		os.system('clear')
 	elif platform == "win32":
 		os.system('CLS')
-
-#Cette section est inutile pour le moment... Doit etre incorporee dans les structures plus basses
-#Entres autres dans des options a ajouter eventuellement telles que aeroport d'arrivee
-#Ou encore pour definir certaines phraseologies a adopter comme le rapport a certains points
-
+    
 def position():
 	position = []
 	aeroport_pos = input('Quel est le code OACI de l\'aeroport / de la FIR? ') 
@@ -110,13 +104,8 @@ def affichage(position):
 	
 	else:
 		print("La position n'est pas valide; veuillez redemarrer.")
-	
-def frequences():
-	nom_controle = input('Quel est le code du controleur? ')
-	frequence_controle = input('Quelle est la frequence du controleur')
-	
 
-#REMPLIR SQUAWK
+    
 def remplirSquawk():
 	for i in range(4001, 4778):
 		boolean = True
@@ -129,7 +118,7 @@ def remplirSquawk():
 			squawk.append(i)
 
 
-#REMPLIR LISTE A PARTIR DES DICTIONNAIRES
+    
 def remplirDictionnaire(nomFichier, liste):
 	fichier = open(nomFichier, "r")
 	lines = fichier.readlines()
@@ -144,7 +133,7 @@ def remplirDictionnaire(nomFichier, liste):
 	fichier.close()
     
 
-#DETERMINER LE NIVEAU DE VOL
+    
 def flightLevel():
 	flight_level = True
 	while flight_level == True:
@@ -173,7 +162,7 @@ def flightLevel():
 			print('Z pour VFR puis IFR')
 
 
-#AFFICHER LA LISTE DES AVIONS
+    
 def afficherListeAvions():
 	if len(listeAvions) == 0:
 		print("\nAUCUN AVION DANS LA LISTE")
@@ -185,7 +174,7 @@ def afficherListeAvions():
 			compteur += 1
 
 
-#ASSIGNER UN SQUAWK A UN AVION
+
 def assignerSquawk():
 	value = []
 	for i in squawk:
@@ -201,7 +190,7 @@ def assignerSquawk():
 		print("ERREUR SQUAWK")
 
 
-#RECHERCHER LE CALLSIGN
+    
 def rechercherIndicatif(code, liste):
 	for i in liste:
 		if code == i[0]:
@@ -209,7 +198,7 @@ def rechercherIndicatif(code, liste):
 	return(code)
 
         
-#AJOUTER UN AVION
+    
 def ajouterAvion():
 	print("\n\n====================== NOUVEL AVION ======================\n")
 
@@ -219,9 +208,9 @@ def ajouterAvion():
     
 	langue = input("Langue: ")
 	if langue.upper() == "EN":
-		remplirDictionnaire("dictionnaires/alphabet_anglais", anglais)
+		remplirDictionnaire("dictionnaries/english/phonetic_alphabet", anglais)
 	elif langue.upper() == "FR":
-		remplirDictionnaire("dictionnaires/alphabet_francais", francais)
+		remplirDictionnaire("dictionnaries/francais/alphabet", francais)
 		
 	destination = input("Destination: ")
 	(flightlevel, regle) = flightLevel()
@@ -247,7 +236,7 @@ def ajouterAvion():
 	print("\nAJOUT DE L'AVION " + nom)
 
 
-#SUPPRIMER UN AVION
+    
 def supprimerAvion():
 	if len(listeAvions) > 0:
 		print("\n\n====================== SUPPRESSION ======================\n")
@@ -296,7 +285,7 @@ def supprimerAvion():
 		print("\nAUCUN AVION A SUPPRIMER")
 
 
-#CREER UNE CLEARANCE
+    
 def creerClearance(avion,position):
 	affichermeteo(aeroport_pos)
 	affichage(position)
@@ -681,7 +670,7 @@ def creerClearance(avion,position):
 	avion[8] = clearance
             
 
-#AJOUTER UNE CLEARANCE A UN AVION
+    
 def ajouterClearance():
 	if len(listeAvions) > 0:
 		platforme(platform)
@@ -705,99 +694,140 @@ def ajouterClearance():
 				platforme(platform)
 	else:
 		print("\nAUCUN AVION DANS LA LISTE")
-
-#Ajout ATC
-
+    
 def ajouterATC():
-	print ("\n\n====================== NOUVEL ATC ======================\n")
-	print ('1. Aerodrome')
-	print ('2. FIR / ARTCC')
-	print ('3. FIR oceanique')
-	type = input ('Quel type? ')
-	if type == '1':
-		remplirDictionnaire("dictionnaires/aeroports", emplacement)
-	elif type == '2':
-		remplirDictionnaire("dictionnaires/FIR", emplacement)
-	elif type == '3':
-		remplirDictionnaire("dictionnaire/OCEANIC", emplacement)
+    print ("\n\n====================== NOUVEL ATC ======================\n")
+    print ('1. Aerodrome')
+    print ('2. FIR / ARTCC')
+    print ('3. FIR oceanique')
+    type = input ('Quel type? ')
+    emplacement_en = []
+    emplacement_fr = []
+    if type == '1':
+        remplirDictionnaire("dictionnaries/airport-radio", emplacement_en)
+        remplirDictionnaire("dictionnaries/airport-radio",  emplacement_fr)
+    elif type == '2':
+        remplirDictionnaire("dictionnaries/english/FIR", emplacement_en)
+        remplirDictionnaire('dictionnaries/francais/FIR', emplacement_fr)
+    elif type == '3':
+        remplirDictionnaire("dictionnaries/english/OCEANIC", emplacement_en)
+        remplirDictionnaire("dictionnaries/francais/OCEANIQUE",  emplacement_fr)
 	
-	estPresent = False
-	while True:
-		endroitCode = input("Endroit? (XXXX): ")
-		if len(endroitCode) == 4:
-			for i in emplacement:
-				if i[0] == endroitCode:
-					endroit = i[1]
-					estPresent = True
-					break
-			if estPresent == True:
-				break
-		print("ENDROIT INEXISTANT\n")
-	
-	remplirDictionnaire("dictionnaires/positions", positions)
+    estPresent = False
+    while True:
+        endroitCode = input("Endroit? (XXXX): ")
+        if len(endroitCode) == 4:
+            for i in emplacement_en:
+                for j in emplacement_fr:
+                    if j[0] == endroitCode:
+                        endroit_fr = j[1]
+                        estPresent = True
+                        break
+                    if estPresent == True:
+                        break
+                if i[0] == endroitCode:
+                    endroit_en = i[1]
+                    estPresent = True
+                    break
+            if estPresent == True:
+                break
+            else:
+                (endroit_en,  endroit_fr) = endroitCode
+                break
+                
+        else:
+            print("ENDROIT INEXISTANT\n")
+        
+    positions_en = []
+    positions_fr = []
 
-	estPresentPosition = False
-	while True:
-		positionRole = input("Role? (XXX): ")
-		if len(positionRole) == 3:
-			for i in positions:
-				if i[0] == positionRole:
-					role = i[1]
-					estPresentPosition = True
-					break
-			if estPresentPosition == True:
-				break
-		print("ROLE INEXISTANT\n")
-    
-	code = endroit + '_' + role
-	nom = endroitCode + ' ' + positionRole
-	frequency = input("Frequence de l'ATC? ")
+    remplirDictionnaire("dictionnaries/english/positions", positions_en)
+    remplirDictionnaire("dictionnaries/francais/postes",  positions_fr)
+    estPresentPosition = False
+    if type == '1' :
+        while True:
+            positionRole = input("Role? (XXX): ")
+            if len(positionRole) == 3:
+                for i in positions_en:
+                    for j in positions_fr:
+                        if j[0] == positionRole:
+                            role_fr = j[1]
+                            estPresentPosition = True
+                            break
+                        if estPresentPosition == True:
+                            break
+                    if i[0] == positionRole:
+                        role_en = i[1]
+                        estPresentPosition = True
+                        break
+                if estPresentPosition == True:
+                    break
+            print("ROLE INEXISTANT\n")
+            
+    elif type == '2':
+        positionRole = 'CTR'
+        
+    elif type == '3':
+        positionRole = 'OCE'
+            
+    code = endroitCode + '_' + positionRole
+    if type == '1':
+        nom_en = endroit_en + ' ' + role_en
+        nom_fr = endroit_fr + ' '+ role_fr
+    elif type == '2' or type == '3':
+        nom_en = endroit_en
+        nom_fr = endroit_fr 
+        
+    frequency = input("Frequence de l'ATC? ")
 
-	ATC = []    
-	ATC.append(code)
-	ATC.append(frequency)
-    
-	listeATC.append(ATC)
-	print("\nAJOUT DE L'ATC " + nom)
+    ATC = []    
+    ATC.append(code)
+    ATC.append(nom_en)
+    ATC.append(nom_fr)
+    ATC.append(frequency)
 
+    listeATC.append(ATC)
+    print("\nAJOUT DE L'ATC " + code)
 
-	#SUPPRIMER UN AVION
-	"""def supprimerATC():
-		if len(listeAvions) > 0:
-			print("\n\n====================== SUPPRESSION ======================\n")
-			
-			avionSuppr = input("Quel avion veux-tu supprimer? ").upper()
-			if avionSuppr != "":
+def afficherListeATC():
+	if len(listeATC) == 0:
+		print("\nAUCUN ATC DANS LA LISTE")
+	else:
+		print("\nIL Y A " + str(len(listeATC)) + " ATC:")
+		compteur = 1
+		for i in listeATC:
+			print(str(compteur) + ". " + i[0] + ": " + str(i))
+			compteur += 1
 
-				#SUPPRESSION PAR INDEX
-				if int(avionSuppr) > 0 and int(avionSuppr) <= len(listeAvions): 
-					avion = listeAvions[int(avionSuppr)-1]
-					squawkAvion = avion[7]+1000
-					for j in squawk:
-						if squawkAvion == j:
-							indice = squawk.index(j)
-							squawk[indice] -= 1000
-							break
-					listeAvions.remove(avion)
-					print("\nSUPPRESSION DE L'AVION...")
+	#SUPPRIMER UN ATC
+def supprimerATC():
+    if len(listeATC) > 0:
+        print("\n\n====================== SUPPRESSION ======================\n")
+        ATCSuppr = input("Quel ATC veux-tu supprimer? ").upper()
+        if ATCSuppr != "":
+            indexATC = []
+            for i in listeATC: 
+                if i[0] == ATCSuppr:
+                    indexATC = i 
+                    break 
+            listeATC.remove(indexATC) 
+            print("\nSUPPRESSION DE L'ATC...")
 
-				else:
-					print("\nAVION INTROUVABLE...")"""
-		    
 
 def atc():
-	print ('1, Ajouter un ATC ')
-	print ('2. Supprimer un ATC')
-	option = input('Quelle option veux-tu choisir? ')
-	if option == '1':
-		ajouterATC()
-	if option == '2':
-		supprimerATC()
+    afficherListeATC()
+    print ('1, Ajouter un ATC ')
+    print ('2. Supprimer un ATC')
+    option = input('Quelle option veux-tu choisir? ')
+    if option == '1':
+        ajouterATC()
+    elif option == '2':
+        supprimerATC()
 
 #### ===== ----- ===== ----- ===== ----- ===== ----- PROGRAMME PRINCIPAL ----- ===== ----- ===== ----- ===== ----- =====  ####
 remplirSquawk()
-remplirDictionnaire("dictionnaires/compagnies", compagnies)
-remplirDictionnaire("dictionnaires/aeroports", aeroports)
+remplirDictionnaire("dictionnaries/companies", compagnies)
+remplirDictionnaire("dictionnaries/airports", aeroports)
 
 while True:
 	metar = []
