@@ -14,17 +14,14 @@ positions = []
 fir = []
 
 def platforme(platform):
-	if platform == "linux" or platform == "linux2":
-		os.system('clear')
-	elif platform == "win32":
-		os.system('CLS')
+    if platform == "linux" or platform == "linux2":
+        os.system('clear')
+    elif platform == "win32":
+        os.system('CLS')
 
 def position():
     position = []
-    aeroport_pos =''
-    while len(aeroport_pos) != 4:
-        aeroport_pos = input('Quel est le code OACI de l\'aeroport / de la FIR? ') 
-
+    aeroport_pos = input('Quel est le code OACI de l\'aeroport / de la FIR? ') 
     while position != '1' and position != '2' and position != '3' and position != '4' and position != '5' and position != '6':
         print ('1. XXXX_DEL')
         print ('2. XXXX_GND')
@@ -32,9 +29,7 @@ def position():
         print ('4. XXXX_DEP')
         print ('5. XXXX_APP')
         print ('6. XXXX_CTR')
-        print('7. XXXX_FSS')
         position = input('Quelle position? ')
-        platforme(platform)
     return (position, aeroport_pos)
 
 (position,aeroport_pos) = position()
@@ -82,7 +77,6 @@ def meteo(aeroport_pos):
 
 
 def affichage(position):
-    print('')
     if position == '1':
         print('1. Clearance initiale')
         print('9. Urgence')
@@ -107,91 +101,91 @@ def affichage(position):
         print("La position n'est pas valide; veuillez redemarrer.")
 
 def remplirSquawk():
-	for i in range(4001, 4778):
-		boolean = True
-		valid = list(str(i))
-		for j in valid:
-			if j == '8' or j == '9':
-				boolean = False
-				break
-		if boolean == True:
-			squawk.append(i)
+    for i in range(4001, 4778):
+        boolean = True
+        valid = list(str(i))
+        for j in valid:
+            if j == '8' or j == '9':
+                boolean = False
+                break
+        if boolean == True:
+            squawk.append(i)
 
 def remplirDictionnaire(nomFichier, liste):
-	fichier = open(nomFichier, "r")
-	lines = fichier.readlines()
-	values = []
-	for i in lines:
-		code, indicatif = i.split(",")
-		indicatif = indicatif.split("\n")[0]
-		values.append(code)
-		values.append(indicatif)
-		liste.append(values)
-		values = []
-	fichier.close()
+    fichier = open(nomFichier, "r")
+    lines = fichier.readlines()
+    values = []
+    for i in lines:
+        code, indicatif = i.split(",")
+        indicatif = indicatif.split("\n")[0]
+        values.append(code)
+        values.append(indicatif)
+        liste.append(values)
+        values = []
+    fichier.close()
 
 
     
 def flightLevel():
-	flight_level = True
-	while flight_level == True:
-		regle = input('Regle de vol? ')
-		if regle.capitalize() == 'I':
-			flight_level = '5000'
-			return (flight_level, regle.capitalize())
+    flight_level = True
+    while flight_level == True:
+        regle = input('Regle de vol? ')
+        if regle.capitalize() == 'I':
+            flight_level = '5000'
+            return (flight_level, regle.capitalize())
 
-		elif regle.capitalize() == 'V':
-			flight_level = '1000'
-			return (flight_level, regle.capitalize())
+        elif regle.capitalize() == 'V':
+            flight_level = '1000'
+            return (flight_level, regle.capitalize())
 
-		elif regle.capitalize() == 'Y' or regle.capitalize() == 'Z':
-			flight_level = 'CHECK'
-			return (flight_level, regle.capitalize())
-		
-		elif regle == 'exit':
-			flight_level = 'VOID'
-			return (flight_level, regle.upper())
+        elif regle.capitalize() == 'Y' or regle.capitalize() == 'Z':
+            flight_level = 'CHECK'
+            return (flight_level, regle.capitalize())
+        
+        elif regle == 'exit':
+            flight_level = 'VOID'
+            return (flight_level, regle.upper())
 
-		else:
-			print('Veuillez entrer selon les options suivantes:')
-			print('I pour IFR')
-			print('V pour VFR')
-			print('Y pour IFR puis VFR')
-			print('Z pour VFR puis IFR')
+        else:
+            print('Veuillez entrer selon les options suivantes:')
+            print('I pour IFR')
+            print('V pour VFR')
+            print('Y pour IFR puis VFR')
+            print('Z pour VFR puis IFR')
 
 
     
 def afficherListeAvions():
-	if len(listeAvions) == 0:
-		print("\nAUCUN AVION DANS LA LISTE")
-	else:
-		print("\nIL Y A " + str(len(listeAvions)) + " AVION(S):")
-		compteur = 1
-		for i in listeAvions:
-			print(str(compteur) + ". " + i[0] + ": " + str(i))
-			compteur += 1
+    if len(listeAvions) == 0:
+        print("\nAUCUN AVION DANS LA LISTE")
+    else:
+        print("\nIL Y A " + str(len(listeAvions)) + " AVION(S):")
+        compteur = 1
+        for i in listeAvions:
+            print(str(compteur) + ". " + i[0] + ": " + str(i))
+            compteur += 1
 
 
 
 def assignerSquawk():
-	value = []
-	for i in squawk:
-		chaineSquawk = list(str(i))
-		if chaineSquawk[0] != '5':
-			value = i
-			break
-	if value != None:
-		indice = squawk.index(value)
-		squawk[indice] += 1000
-		return(value)
-	else:
-		print("ERREUR SQUAWK")
+    value = []
+    for i in squawk:
+        chaineSquawk = list(str(i))
+        if chaineSquawk[0] != '5':
+            value = i
+            break
+    if value != None:
+        indice = squawk.index(value)
+        squawk[indice] += 1000
+        return(value)
+    else:
+        print("ERREUR SQUAWK")
 
 def rechercherIndicatif(code, liste):
-	for i in liste:
-		if code == i[0]:
-			return(i[1])
-	return(code)
+    for i in liste:
+        if code == i[0]:
+            return(i[1])
+    return(code)
 
 def ajouterAvion():
     print("\n\n====================== NOUVEL AVION ======================\n")
@@ -200,18 +194,12 @@ def ajouterAvion():
     numeroVol = input("Numero du vol: ")
     nom = compagnie + numeroVol
 
-    while True:
-        langue = input("Langue: ")
-        if langue.upper() == "EN":
-            remplirDictionnaire("dictionnaries/english/alphabet", anglais)
-            break
-        elif langue.upper() == "FR":
-            remplirDictionnaire("dictionnaries/francais/alphabet", francais)
-            break
-        else:
-            print('Sorry, this language is not covered yet')
-            print('Please choose between english (EN) or french (FR)')
-
+    langue = input("Langue: ")
+    if langue.upper() == "EN":
+        remplirDictionnaire("../dictionnaries/english/alphabet", anglais)
+    elif langue.upper() == "FR":
+        remplirDictionnaire("../dictionnaries/francais/alphabet", francais)
+        
     destination = input("Destination: ")
     (flightlevel, regle) = flightLevel()
     if regle == 'EXIT':
@@ -219,6 +207,7 @@ def ajouterAvion():
     sid = input("SID: ")
     rwy = input("RWY: ")
     squawk = assignerSquawk()
+    
 
     avion = []    
     avion.append(nom.upper())
@@ -239,47 +228,35 @@ def ajouterAvion():
 def supprimerAvion():
     if len(listeAvions) > 0:
         print("\n\n====================== SUPPRESSION ======================\n")
+
         avionSuppr = input("Quel avion veux-tu supprimer? ").upper()
         if avionSuppr != "":
-            if avionSuppr.isdigit() == True:
-#SUPPRESSION PAR INDEX
-                if int(avionSuppr) > 0 and int(avionSuppr) <= len(listeAvions): 
-                    avion = listeAvions[int(avionSuppr)-1]
-                    squawkAvion = avion[7]+1000
-                    for j in squawk:
-                        if squawkAvion == j:
-                            indice = squawk.index(j)
-                            squawk[indice] -= 1000
-                            break
-                    listeAvions.remove(avion)
+
+            #SUPPRESSION PAR INDEX
+            if int(avionSuppr) > 0 and int(avionSuppr) <= len(listeAvions): 
+                avion = listeAvions[int(avionSuppr)-1]
+                squawkAvion = avion[7]+1000
+                for j in squawk:
+                    if squawkAvion == j:
+                        indice = squawk.index(j)
+                        squawk[indice] -= 1000
+                        break
+                listeAvions.remove(avion)
+                print("\nSUPPRESSION DE L'AVION...")
 
             else:
-                avionPresent = False 
-                indexAvion = [] 
-                for i in listeAvions: 
-                    if i[0] == avionSuppr: 
-                        avionPresent = True 
-                        indexAvion = i 
-                        break 
-                if avionPresent == True: 
-                    squawkAvion = indexAvion[7]+1000 
-                    for j in squawk: 
-                        if squawkAvion == j: 
-                            indice = squawk.index(j) 
-                            squawk[indice] -= 1000 
-                            break 
-                    listeAvions.remove(indexAvion) 
-                    print("\nSUPPRESSION DE L'AVION...")               
+                print("\nAVION INTROUVABLE...")
 
-                print("\nSUPPRESSION DE L'AVION...")
         else:
             print("\nAVION INTROUVABLE...")
+    
     else:
         print("\nAUCUN AVION A SUPPRIMER")
 
 
     
 def creerClearance(avion,position):
+    affichermeteo(aeroport_pos)
     affichage(position)
     typeClearance = input('Quelle clearance veux-tu donner? ')
     (vents, altimetre) = meteo(aeroport_pos)
@@ -293,9 +270,9 @@ def creerClearance(avion,position):
     elif langue == "FR":
         langueDico = francais
 
-    if regle == 'I' or regle == 'Y':
+    if regle == 'I' or regle == 'Y' or regle == 'Z':
         nom = rechercherIndicatif(avion[0][:3], compagnies)+" "+avion[0][3:]
-    elif regle == 'V'  or regle == 'Z':
+    elif regle == 'V':
         if avion[0].find('-') != -1:
             nom += rechercherIndicatif(avion[0][0], langueDico) + " "
             nom += rechercherIndicatif(avion[0][longueurNom-2], langueDico) + " "
@@ -325,7 +302,7 @@ def creerClearance(avion,position):
                 clearance_txt = nom+', depart vers '+indicatifAeroport+' approuve, depart via '+sid+', puis route prevue, piste '+rwy+' prevue , montee initiale '+flightLevel+', squawk '+squawk
             clearance = 'INIT'
 
-		#Clearance Initiale + Taxi VFR
+        #Clearance Initiale + Taxi VFR
         elif regle == 'V' or regle == 'Z':
             taxiRoute = input('Taxi? ')
             avion.append(taxiRoute)
@@ -348,7 +325,7 @@ def creerClearance(avion,position):
                     clearance_txt = nom + ', montee initiale ' + flightLevel + ', squawk ' + squawk + ", roulez point d'arret piste "+ rwy + ' via ' + taxiRoute + "restez a l'ecart piste " + rwy + ', rappelez pret a decoller '
             clearance = 'TAXI'
 
-	#Clearance Push + Start
+    #Clearance Push + Start
     elif typeClearance == '2':
         if langue == 'EN':
             clearance_txt = nom+', pushback and startup at your discretion, advise ready for taxi.'
@@ -358,7 +335,7 @@ def creerClearance(avion,position):
 
         clearance = 'PUSH'
 
-	#Clearance Taxi
+    #Clearance Taxi
     elif typeClearance == '3':
         taxiRoute = input('Taxi? ')
         avion.append(taxiRoute)
@@ -370,7 +347,7 @@ def creerClearance(avion,position):
 
         clearance = 'TAXI'
 
-	#Clearance Line-up
+    #Clearance Line-up
     elif typeClearance == '4':
         if langue == 'EN':
             clearance_txt = nom+' line up and wait runway '+rwy
@@ -380,7 +357,7 @@ def creerClearance(avion,position):
 
         clearance = 'LNUP'
 
-	#Clearance Decollage
+    #Clearance Decollage
     elif typeClearance == '5':
         if regle == 'I' or regle == 'Y' or regle == 'Z':
             ATC = choisirATC()
@@ -407,7 +384,7 @@ def creerClearance(avion,position):
 
         clearance = 'TKOF'
 
-	#Clearance leg VFR
+    #Clearance leg VFR
     elif typeClearance == '6':
         if regle == 'I' or regle == 'Y':
             print('Non disponible pour les vols IFR')
@@ -424,7 +401,7 @@ def creerClearance(avion,position):
                 print ('3. Allongez Downwind ')
                 position2 = input('Quelle clearance? ')
 
-				#Report end of downwind
+                #Report end of downwind
                 if position2 == '1':
                     if langue == 'EN':
                         clearance_txt = nom + ', report end of downwind runway ' + rwy
@@ -434,7 +411,7 @@ def creerClearance(avion,position):
 
                     clearance = 'DWND'
 
-				#Downwind -> Final
+                #Downwind -> Final
                 elif position2 == '2':
                     numero = input('Numero en approche? ')
                     if langue == 'EN':
@@ -444,7 +421,7 @@ def creerClearance(avion,position):
 
                     clearance = 'FINL'
 
-				#Extend Downwind
+                #Extend Downwind
                 elif position2 == '3':
                     numero = input('Numero en approche? ')
                     if langue == 'EN':
@@ -460,7 +437,7 @@ def creerClearance(avion,position):
                 print ('3. VFR entry-point')
                 position2 = input('Quelle clearance? ')
 
-				#Approche Straight-In
+                #Approche Straight-In
                 if position2 == '1':
                     if langue == 'EN':
                         clearance_txt = nom + ', make straight-in approach runway ' + rwy + ', winds '+vents+', altimeter ' + altimetre
@@ -468,7 +445,7 @@ def creerClearance(avion,position):
                         clearance_txt = nom + ', faites une approche directe piste ' + rwy + ', vents '+vents+', altimetre ' + altimetre
                     clearance = 'APPR'
 
-				#Fin de downwind
+                #Fin de downwind
                 elif position2 == '2':
                     numero = input('Numero en approche? ')
                     if langue == 'EN':
@@ -477,7 +454,7 @@ def creerClearance(avion,position):
                         clearance_txt = nom + ', rappelez en finale piste ' + rwy + ', numero ' + numero
                     clearance = 'FINL'
 
-				#VFR entry point
+                #VFR entry point
                 elif position == '3':
                     print ("1. Arrive de l'est")
                     print ("2. Arrive de l'ouest")
@@ -512,7 +489,7 @@ def creerClearance(avion,position):
                             clearance = 'LHDW'
 
 
-	#Clearances d'approche
+    #Clearances d'approche
     elif typeClearance == '7':
         print ('1. Atterissage')
         print ('2. Touch and go')
@@ -521,7 +498,7 @@ def creerClearance(avion,position):
         print ('5. Go around')
         operation = input('Quelle operation? ')
 
-		#Atterissage
+        #Atterissage
         if operation == '1':
             sortie = input('Quelle sortie? ')
             if langue == 'EN':
@@ -531,7 +508,7 @@ def creerClearance(avion,position):
                 clearance_txt = nom + ', vents '+vents+', sortez a ' +  sortie + ', autorise a atterir piste ' + rwy
             clearance = 'LDG'+rwy
 
-		#Touch and Go	
+        #Touch and Go	
         elif operation == '2':
             if langue == 'EN':
                 clearance_txt = nom + ', runway ' + rwy + ', cleared touch and go, winds '+vents
@@ -539,7 +516,7 @@ def creerClearance(avion,position):
                 clearance_txt = nom + ', piste ' + rwy + ', autorise toucher, vents '+vents
             clearance = 'T&GO'
 
-		#Low Pass
+        #Low Pass
         elif operation == '3':
             if langue == 'EN':
                 clearance_txt = nom + ', cleared low pass runway ' + rwy + ', winds '+vents
@@ -547,7 +524,7 @@ def creerClearance(avion,position):
                 clearance_txt = nom + ', autorise low pass piste ' + rwy + ', winds '+vents
             clearance = 'LOWP'
 
-		#Stop and Go
+        #Stop and Go
         elif operation == '4':
             if langue == 'EN':
                 clearance_txt = nom + ', cleared to land runway ' + rwy + ', winds '+vents+' \n Report ready for take-off -> Donner clearance Takeoff'
@@ -555,7 +532,7 @@ def creerClearance(avion,position):
                 clearance_txt = nom + ', autorise a atterir piste ' + rwy + ', vents '+vents+' \n Rappelez pret a decoller -> Donner clearance Takeoff'
             clearance = 'S&GO'
 
-		#Go-Around	
+        #Go-Around	
         elif operation == '5':
             print ('1. Initie par ATC')
             print ('2. Initie par pilote')
@@ -619,19 +596,15 @@ def ajouterClearance():
     if len(listeAvions) > 0:
         platforme(platform)
         while True:
-            affichermeteo(aeroport_pos)
             print("\n\n================== CLEARANCE ==================\n")
             afficherListeAvions()
-            avionClearance = input("\nA quel avion veux-tu donner une clearance? ").upper()
+            avionClearance = input("A quel avion veux-tu donner une clearance? ").upper()
             if avionClearance != "":
-                if avionClearance.isdigit() == True:
+                if type(avionClearance == int):
                     if int(avionClearance) > 0 and int(avionClearance) <= len(listeAvions): 
                         avion = listeAvions[int(avionClearance)-1]
-                        creerClearance(avion,position) 
+                        creerClearance(avion,position)
                         break
-                
-                elif avionClearance.upper() == 'EXIT':
-                    break
                 
                 else:
                     for i in listeAvions:
@@ -639,245 +612,20 @@ def ajouterClearance():
                             avionPresent = True
                             indexAvion = i
                             break
-                    if avionPresent == True:
-                        creerClearance(indexAvion,position)
-                        break
-                    else:
-                        print('AVION INTROUVABLE')
-            else:
-                print('VEUILLEZ ENTRER UN AVION')
-    else:
-        print ('AUCUN AVION DANS LA LISTE')
-def choisirATC():
-    if len(listeATC) > 0:
-        platforme(platform)
-        while True:
-            print("\n\n================== CHOIX ATC ==================\n")
-            afficherListeATC()
-            print('POUR AJOUTER UN ATC VEUILLEZ TAPER "ATC"')
-            ATCClearance = input("\nQuel ATC veux-tu choisir pour la clearance ").upper()
-            if len(ATCClearance) != 0:
-                if ATCClearance.isdigit() == True:
-                    if int(ATCClearance) > 0 and int(ATCClearance) <= len(listeATC): 
-                        ATC = listeATC[int(ATCClearance)-1]
-                        return ATC
-    
-                elif ATCClearance == 'ATC' :
-                    ajouterATC()
-
-                else:
-                    ATCPresent = False
-                    indexATC = []
-                    for i in listeATC:
-                        if i[0] == ATCClearance:
-                            ATCPresent = True
-                            indexATC = i
-                            break
-                    if ATCPresent == True:
-                        return indexATC
-                        break
-                    else:
-                        print("\nATC INTROUVABLE...")
-                        input(' ')
-                        platforme(platform)
-            else:
-                ajouterATC()
-    else:
-        print("\nAUCUN ATC DANS LA LISTE")        
-
-def ajouterATC():
-    while True:
-        print ("\n\n====================== NOUVEL ATC ======================\n")
-        print("0. QUITTER CE MENU")
-        print ('1. Aerodrome')
-        print ('2. FIR / ARTCC')
-        print ('3. FIR oceanique')
-        type = input ('Quel type? ')
-        emplacement_en = []
-        emplacement_fr = []
-        if type == '1':
-            remplirDictionnaire("dictionnaries/airport-radio", emplacement_en)
-            remplirDictionnaire("dictionnaries/airport-radio",  emplacement_fr)
-            break
-        elif type == '2':
-            remplirDictionnaire("dictionnaries/english/ATC/FIR", emplacement_en)
-            remplirDictionnaire('dictionnaries/francais/ATC/FIR', emplacement_fr)
-            break
-        elif type == '3':
-            remplirDictionnaire("dictionnaries/english/ATC/OCEANIC", emplacement_en)
-            remplirDictionnaire("dictionnaries/francais/ATC/OCEANIQUE",  emplacement_fr)
-            break
-            
-        elif type == '0':
-            break
-            
-        else:
-            print ('CE CHOIX N\'EST PAS VALIDE')
-    if type == '0':
-        return()
-
-    estPresent = False
-    while True:
-        endroitCode = input("Endroit? (XXXX): ")
-        if len(endroitCode) == 4:
-            for i in emplacement_en:
-                for j in emplacement_fr:
-                    if j[0] == endroitCode.upper():
-                        endroit_fr = j[1]
-                        estPresent = True
-                        break
-                    if estPresent == True:
-                        break
-                if i[0] == endroitCode.upper():
-                    endroit_en = i[1]
-                    estPresent = True
-                    break
-            if estPresent == True:
+            if avionPresent == True:
+                creerClearance(indexAvion,position)
                 break
             else:
-                endroit_en = endroitCode.upper()
-                endroit_fr = endroitCode.upper()
-                break
-                
-        else:
-            print("ENDROIT INEXISTANT\n")
-        
-    positions_en = []
-    positions_fr = []
-
-    remplirDictionnaire("dictionnaries/english/ATC/positions", positions_en)
-    remplirDictionnaire("dictionnaries/francais/ATC/postes",  positions_fr)
-    estPresentPosition = False
-    if type == '1' :
-        while True:
-            positionRole= input("Role? (XXX): ").upper()
-            if len(positionRole) == 3 or positionRole.upper() == 'ATIS':
-                for i in positions_en:
-                    for j in positions_fr:
-                        if j[0] == positionRole.upper() :
-                            role_fr = j[1]
-                            estPresentPosition = True
-                            break
-                        if estPresentPosition == True:
-                            break
-                    if i[0] == positionRole.upper() :
-                        role_en = i[1]
-                        estPresentPosition = True
-                        break
-                if estPresentPosition == True:
-                    break
-            print("ROLE INEXISTANT\n")
-            
-    elif type == '2':
-        positionRole = 'CTR'
-        
-    elif type == '3':
-        while True:
-            print ('1. XXXX_OCE')
-            print('2. XXX_FSS')
-            role = input('Quel poste? ')
-            if role == '1':
-                positionRole = 'OCE'
-                break
-            elif role =='2':
-                positionRole = 'FSS'
-                break
-            
-    code = endroitCode + '_' + positionRole
-    if type == '1':
-        nom_en = endroit_en + ' ' + role_en
-        nom_fr = endroit_fr + ' '+ role_fr
-    elif type == '2' or type == '3':
-        nom_en = endroit_en
-        nom_fr = endroit_fr 
-
-    ATC = []    
-    ATC.append(code)
-    ATC.append(nom_en)
-    ATC.append(nom_fr)
-    ATC.append(ATCFrequency(type))
-
-    listeATC.append(ATC)
-    print("\nAJOUT DE L'ATC " + code)
-
-def ATCFrequency(type):
-    while True:
-        frequency = input('Quelle est la frequence de l\'ATC? ').replace(',', '.')
-        if float(frequency) > 117.975 and float(frequency) < 137.00 and float(frequency) != 121.5 :
-            return frequency
-        else:
-            print('LA FREQUENCE N\'EST PAS VALIDE, VEUILLEZ RECOMMENCER')
-
-def afficherListeATC():
-    if len(listeATC) == 0:
-        print("\nAUCUN ATC DANS LA LISTE")
+                print("\nAVION INTROUVABLE...")
+                input(' ')
+                platforme(platform)'''
     else:
-        print("\nIL Y A " + str(len(listeATC)) + " ATC:")
-        compteur = 1
-        for i in listeATC:
-            print(str(compteur) + ". " + i[0] + ": " + str(i))
-            compteur += 1
-
-	#SUPPRIMER UN ATC
-def supprimerATC():
-    if len(listeATC) > 0:
-        while True:
-            print("\n\n====================== SUPPRESSION ======================\n")
-            ATCSuppr = input("QUEL ATC VEUX-TU SUPPRIMER?\n0 POUR SORTIR DU MENU ").upper()
-            if ATCSuppr != "":
-                if ATCSuppr.isdigit() == True and int(ATCSuppr) != 0:
-                    if int(ATCSuppr) > 0 and int(ATCSuppr) <= len(listeATC): 
-                        ATC = listeATC[int(ATCSuppr)-1]
-                        listeATC.remove(ATC)
-                        break
-                    
-                    else:
-                        print('ATC INCONNU')
-                
-                elif ATCSuppr == '0':
-                    break
-                
-                else:
-                    ATCPresent = False
-                    indexATC = []
-                    for i in listeATC: 
-                        if i[0] == ATCSuppr:
-                            ATCPresent = True
-                            indexATC = i 
-                            break
-                    if  ATCPresent == True:
-                        listeATC.remove(indexATC) 
-                        print("\nSUPPRESSION DE L'ATC...")
-                        break
-                    else:
-                        print('ATC INEXISTANT')
-            else:
-                print('\nVEUILLEZ ENTRER UN ATC')
-    else:
-        print ('IL N\'Y A PAS D\'ATC DANS LA LISTE')
-def atc():
-    afficherListeATC()
-    print ('\n1, Ajouter un ATC ')
-    print ('2. Supprimer un ATC')
-    option = input('Quelle option veux-tu choisir? ')
-    if option == '1':
-        ajouterATC()
-    elif option == '2':
-        supprimerATC()
-
-def UNICOM():
-    ATC = []    
-    ATC.append('UNICOM')
-    ATC.append('UNICOM')
-    ATC.append('UNICOM')
-    ATC.append('122.8')
-    listeATC.append(ATC)
+        print("\nAUCUN AVION DANS LA LISTE")
 
 #### ===== ----- ===== ----- ===== ----- ===== ----- PROGRAMME PRINCIPAL ----- ===== ----- ===== ----- ===== ----- =====  ####
 remplirSquawk()
-remplirDictionnaire("dictionnaries/companies", compagnies)
-remplirDictionnaire("dictionnaries/airports", aeroports)
-UNICOM()
+remplirDictionnaire("../dictionnaries/companies", compagnies)
+remplirDictionnaire("../dictionnaries/airports", aeroports)
 
 while True:
     metar = []
@@ -886,7 +634,7 @@ while True:
     afficherListeAvions()
     print("\n1. Ajouter un avion")
     print("2. Ajouter clearance a un avion")
-    print("3. Supprimer un avion")
+    print("3. Supprimer")
     print("4. ATC / Frequences")
     print("5. Quitter")
     choix = input("Que veux-tu faire? ")
