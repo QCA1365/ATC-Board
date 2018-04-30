@@ -47,8 +47,8 @@ def getMETAR(aeroport_pos,position):
     raw_data = all[1]
     metar_html = str(raw_data).split("<strong>")
     metar_html = metar_html[1].split("</strong>")
-    if aeroport_pos == '6' or aeroport_pos == '7':
-        metar_full = metar_html
+    if position == '6' or position == '7':
+        metar_full = metar_html[0]
     else:
         metar_RMK = metar_html[0].split("RMK")
         metar_full = (metar_RMK[0])
@@ -133,8 +133,6 @@ def remplirDictionnaire(nomFichier, liste):
 		values = []
 	fichier.close()
 
-
-    
 def flightLevel():
 	flight_level = True
 	while flight_level == True:
@@ -173,8 +171,6 @@ def afficherListeAvions():
 		for i in listeAvions:
 			print(str(compteur) + ". " + i[0] + ": " + str(i))
 			compteur += 1
-
-
 
 def assignerSquawk():
 	value = []
@@ -651,57 +647,42 @@ def ajouterClearance():
                 print('VEUILLEZ ENTRER UN AVION')
     else:
         print ('AUCUN AVION DANS LA LISTE')
-        
 
-def modifierAvion():
+def modifierAvion(avion):
     print('1. Changer la langue')
     print('2. Changer la destination')
     print('3. Changer la regle de vol')
     print('4. Changer la SID')
     print('6. Changer la piste)' )
     print('7. Changer l\' altitude')
-    typeClearance = input('Quelle modification veux-tu faire? ')
-    (vents, altimetre) = meteo(aeroport_pos)
-    longueurNom = len(avion[0])
-    langue = avion[1]
-    regle = avion[3]
-    nom = ""
-    langueDico = []
-    if langue == "EN":
-        langueDico = anglais
-    elif langue == "FR":
-        langueDico = francais
-
-    if regle == 'I' or regle == 'Y':
-        nom = rechercherIndicatif(avion[0][:3], compagnies)+" "+avion[0][3:]
-    elif regle == 'V'  or regle == 'Z':
-        if avion[0].find('-') != -1:
-            nom += rechercherIndicatif(avion[0][0], langueDico) + " "
-            nom += rechercherIndicatif(avion[0][longueurNom-2], langueDico) + " "
-            nom += rechercherIndicatif(avion[0][longueurNom-1], langueDico)
-        else:
-            for i in avion[0]:
-                nom += rechercherIndicatif(i, langueDico)
-                if avion[0].index(i) == len(avion[0])-1:
-                    break
-                nom += " "
-
-    destination = avion[2]
-    indicatifAeroport = rechercherIndicatif(avion[2], aeroports)
-
-    sid = avion[4]
-    rwy = avion[5]
-    flightLevel = avion[6]
-    squawk = str(avion[7])
-    clearance = avion[8]
-    clearance_txt = ""
-
+    ObjetModif = input('Quelle modification veux-tu faire? ')
+    if ObjetModif == '1':
+        langue = ''
+        while langue.upper() != 'FR' and langue .upper() != 'EN':
+            langue = input('Quelle langue?').upper()
+            if langue == 'EN':
+                print('EN')
+            elif langue == ('FR'):
+                print('FR')
+            else:
+                print('Cette langue n\'est pas valide, veuillez recommencer')
+    
+    elif ObjetModif =='2':
+        destination = input('Quelle est la destination? ')
+        avion[2] = destination
+    elif ObjetModif == '3':
+        regle = ''
+        while regle != 'I' and regle != 'V' and regle != 'Y' and regle != 'Z':
+            regle = input('Regle? ')
+            if regle != 'I' and regle != 'V' and regle != 'Y' and regle != 'Z':
+                print('Cette option n\'est pas valide, veuillez recommencer')
+            else:
+                avion[3] = regle
 
 def choisirAvion():
     if len(listeAvions) > 0:
         platforme(platform)
         while True:
-            affichermeteo(aeroport_pos)
             print("\n\n================== MODIFICATION AVION ==================\n")
             afficherListeAvions()
             avionModif = input("\nA quel avion veux-tu modifier? ").upper()
@@ -712,12 +693,12 @@ def choisirAvion():
                         modifierAvion(avion,position) 
                         break
                 
-                elif avionClearance.upper() == 'EXIT':
+                elif avionModif.upper() == 'EXIT':
                     break
                 
                 else:
                     for i in listeAvions:
-                        if i[0] == avionClearance:
+                        if i[0] == avionModif:
                             avionPresent = True
                             indexAvion = i
                             break
@@ -730,6 +711,7 @@ def choisirAvion():
                 print('VEUILLEZ ENTRER UN AVION')
     else:
         print ('AUCUN AVION DANS LA LISTE')
+    
 def choisirATC():
     if len(listeATC) > 0:
         platforme(platform)
@@ -800,7 +782,7 @@ def ajouterATC():
 
     estPresent = False
     while True:
-        endroitCode = input("Endroit? (XXXX): ")
+        endroitCode = input("Endroit? (XXXX): ").upper()
         if len(endroitCode) == 4:
             for i in emplacement_en:
                 for j in emplacement_fr:
@@ -877,12 +859,12 @@ def ajouterATC():
     ATC.append(code)
     ATC.append(nom_en)
     ATC.append(nom_fr)
-    ATC.append(ATCFrequency(type))
+    ATC.append(ATCFrequency())
 
     listeATC.append(ATC)
     print("\nAJOUT DE L'ATC " + code)
 
-def ATCFrequency(type):
+def ATCFrequency():
     while True:
         frequency = input('Quelle est la frequence de l\'ATC? ').replace(',', '.')
         if float(frequency) > 117.975 and float(frequency) < 137.00 and float(frequency) != 121.5 :
@@ -991,7 +973,7 @@ while True:
         atc()
         
     elif choix == '5':
-        
+        choisirAvion()
         
     #QUITTER
     elif choix == '6':
