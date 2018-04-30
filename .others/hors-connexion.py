@@ -1,8 +1,6 @@
 import os
 from sys import platform
 from datetime import datetime
-from bs4 import BeautifulSoup
-import urllib.request
 listeAvions = []
 listeATC = []
 squawk = []
@@ -40,13 +38,7 @@ def position():
 (position,aeroport_pos) = position()
 
 def getMETAR(aeroport_pos,position):
-    webpage = "https://aviationweather.gov/adds/tafs/?station_ids="+aeroport_pos+"&std_trans=translated&submit_both=Get+TAFs+and+METARs"
-    websource = urllib.request.urlopen(webpage)
-    soup = BeautifulSoup(websource.read(), "html.parser")
-    all = soup.find_all("strong", {"id": ""})
-    raw_data = all[1]
-    metar_html = str(raw_data).split("<strong>")
-    metar_html = metar_html[1].split("</strong>")
+    metar_html = 'CYUL 301900Z 03012KT 15SM OVC016 09/06 A2997 RMK SC8  SLP153 , '.split(',')
     if position == '6' or position == '7':
         metar_full = metar_html[0]
     else:
@@ -160,8 +152,6 @@ def flightLevel():
 			print('Y pour IFR puis VFR')
 			print('Z pour VFR puis IFR')
 
-
-    
 def afficherListeAvions():
 	if len(listeAvions) == 0:
 		print("\nAUCUN AVION DANS LA LISTE")
@@ -202,10 +192,10 @@ def ajouterAvion():
     while True:
         langue = input("Langue: ")
         if langue.upper() == "EN":
-            remplirDictionnaire("dictionnaries/english/alphabet", anglais)
+            remplirDictionnaire("../dictionnaries/english/alphabet", anglais)
             break
         elif langue.upper() == "FR":
-            remplirDictionnaire("dictionnaries/francais/alphabet", francais)
+            remplirDictionnaire("../dictionnaries/francais/alphabet", francais)
             break
         else:
             print('Sorry, this language is not covered yet')
@@ -698,9 +688,9 @@ def modifierAvion(avion):
             else:'Veuillez entrer un numéro de piste valide'
     
     elif ObjetModif == '6':
-        level = input('Altitude')
-        if len(level) == 3:
-            altitude = 'FL' + level
+        altitude = input('Altitude? ')
+        if len(altitude) == 3:
+            altitude = 'FL' + altitude
         avion[6] = altitude
 
 def choisirAvion():
@@ -714,7 +704,7 @@ def choisirAvion():
                 if avionModif.isdigit() == True:
                     if int(avionModif) > 0 and int(avionModif) <= len(listeAvions): 
                         avion = listeAvions[int(avionModif)-1]
-                        modifierAvion(avion,position) 
+                        modifierAvion(avion) 
                         break
                 
                 elif avionModif.upper() == 'EXIT':
@@ -724,10 +714,10 @@ def choisirAvion():
                     for i in listeAvions:
                         if i[0] == avionModif:
                             avionPresent = True
-                            indexAvion = i
+                            avion = i
                             break
                     if avionPresent == True:
-                        creerClearance(indexAvion,position)
+                        modifierAvion(avion)
                         break
                     else:
                         print('AVION INTROUVABLE')
@@ -784,16 +774,16 @@ def ajouterATC():
         emplacement_en = []
         emplacement_fr = []
         if type == '1':
-            remplirDictionnaire("dictionnaries/airport-radio", emplacement_en)
-            remplirDictionnaire("dictionnaries/airport-radio",  emplacement_fr)
+            remplirDictionnaire("../dictionnaries/airport-radio", emplacement_en)
+            remplirDictionnaire("../dictionnaries/airport-radio",  emplacement_fr)
             break
         elif type == '2':
-            remplirDictionnaire("dictionnaries/english/ATC/FIR", emplacement_en)
-            remplirDictionnaire('dictionnaries/francais/ATC/FIR', emplacement_fr)
+            remplirDictionnaire("../dictionnaries/english/ATC/FIR", emplacement_en)
+            remplirDictionnaire('../dictionnaries/francais/ATC/FIR', emplacement_fr)
             break
         elif type == '3':
-            remplirDictionnaire("dictionnaries/english/ATC/OCEANIC", emplacement_en)
-            remplirDictionnaire("dictionnaries/francais/ATC/OCEANIQUE",  emplacement_fr)
+            remplirDictionnaire("../dictionnaries/english/ATC/OCEANIC", emplacement_en)
+            remplirDictionnaire("../dictionnaries/francais/ATC/OCEANIQUE",  emplacement_fr)
             break
             
         elif type == '0':
@@ -833,8 +823,8 @@ def ajouterATC():
     positions_en = []
     positions_fr = []
 
-    remplirDictionnaire("dictionnaries/english/ATC/positions", positions_en)
-    remplirDictionnaire("dictionnaries/francais/ATC/postes",  positions_fr)
+    remplirDictionnaire("../dictionnaries/english/ATC/positions", positions_en)
+    remplirDictionnaire("../dictionnaries/francais/ATC/postes",  positions_fr)
     estPresentPosition = False
     if type == '1' :
         while True:
@@ -961,11 +951,37 @@ def UNICOM():
     ATC.append('122.8')
     listeATC.append(ATC)
 
+def ACA1365():
+    compagnie = 'ACA'
+    numeroVol = '1365'
+    nom = compagnie + numeroVol
+    langue = 'EN'
+    remplirDictionnaire("../dictionnaries/english/alphabet", anglais)
+    destination = 'CYYZ'
+    flightlevel = '5000'
+    regle = 'I'
+    sid = 'TRUDO2'
+    rwy = '24L'
+    squawk = assignerSquawk()
+
+    avion = []    
+    avion.append(nom.upper())
+    avion.append(langue.upper())
+    avion.append(destination.upper())
+    avion.append(regle.upper())
+    avion.append(sid.upper())
+    avion.append(rwy.upper())
+    avion.append(flightlevel)
+    avion.append(squawk)
+    avion.append(None)#clearance nulle
+    
+    listeAvions.append(avion)
 #### ===== ----- ===== ----- ===== ----- ===== ----- PROGRAMME PRINCIPAL ----- ===== ----- ===== ----- ===== ----- =====  ####
 remplirSquawk()
-remplirDictionnaire("dictionnaries/companies", compagnies)
-remplirDictionnaire("dictionnaries/airports", aeroports)
+remplirDictionnaire("../dictionnaries/companies", compagnies)
+remplirDictionnaire("../dictionnaries/airports", aeroports)
 UNICOM()
+ACA1365()
 
 while True:
     metar = []
