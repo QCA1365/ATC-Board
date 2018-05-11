@@ -32,9 +32,12 @@ def position():
         print ('4. XXXX_DEP')
         print ('5. XXXX_APP')
         print ('6. XXXX_CTR')
-        print('7. XXXX_FSS')
+        print ('7. XXXX_FSS')
         position = input('Quelle position? ')
-        platforme(platform)
+        if position == '100':
+            AIRPLANES_DEFAULT()
+            position = '3' ## A modifier selon le test a faire ##
+    platforme(platform)
     return (position, aeroport_pos)
 
 def getMETAR(aeroport_pos,position):
@@ -502,7 +505,9 @@ def ground(avion):
         
     #Clearance Taxi
     elif choix == '2' or choix =='3':
-        taxiRoute = input('Taxi? ')
+        if len(avion) == 10:
+            avion.remove(avion[9])
+        taxiRoute = input('Taxi? ').upper()
         avion.append(taxiRoute)
         if choix == '2':
             if langue == 'EN':
@@ -512,18 +517,19 @@ def ground(avion):
                 clearance_txt = nom + ', piste ' + rwy + ', altimetre ' + altimetre + ', taxi ' + taxiRoute + ", restez a l'ecart piste " + rwy + ', rappelez pret a decoller' 
         
         elif choix == '3':
-            gate = input('Porte (Si non applicable, entrez 0 ')
+            gate = input('Porte (Si non applicable, entrez 0) ')
             if gate != '0':
                 if langue == 'EN':
                     clearance_txt = nom + ', taxi via ' + taxiRoute + ' to gate ' + gate
                 elif langue == 'FR':
-                    clearance_txt = nom + ', circulez via ' + taxiRoute + 'jusqu\'a la porte ' + gate
+                    clearance_txt = nom + ', circulez via ' + taxiRoute + ' jusqu\'a la porte ' + gate
             
             elif gate == '0':
                 if langue == 'EN':
                     clearance_txt = nom + ', taxi via ' + taxiRoute + ' to the gate'
                 elif langue  == 'FR':
-                    clearance_txt = nom + ', circulez via ' + taxiRoute + 'jusqu\'au parking '
+                    clearance_txt = nom + ', circulez via ' + taxiRoute + ' jusqu\'au parking '
+        clearance = 'TAXI'
 
     elif choix == '4':
         print('1. Vol VFR')
@@ -533,18 +539,18 @@ def ground(avion):
             if langue == 'EN':
                 clearance_txt = nom  + ', VFR [Intentions] approved, depart runway' + rwy + ', climb runway heading, not above ' + flightLevel + ' until advised, squawk ' + squawk
             elif langue == 'FR':
-                clearance_txt = nom + ', [Intentions] VFR approuvees, piste ' + rwy + ', montez dans l\'axe de la piste, ne depassez pas ' + flightLevel + 'avant d\'etre autorise, affichez ' + squawk
+                clearance_txt = nom + ', [Intentions] VFR approuvees, piste ' + rwy + ', montez dans l\'axe de la piste, ne depassez pas ' + flightLevel + ' avant d\'etre autorise, affichez ' + squawk
         elif type == '2':
             if avion[5][-1:] == 'L':
                 if langue == 'EN':
                     clearance_txt = nom + 'VFR circuits approved, runway ' + rwy + ' left hand circuits, not above ' + flightLevel + ', squawk ' + squawk 
                 elif langue == 'FR':
-                    clearance_txt = nom + ', Tours de pistes approuves, piste ' + rwy + ', tours de piste main gauche, ne depassez pas ' + flightLevel + ', squawk ' + squawk
+                    clearance_txt = nom + ', Tours de pistes approuves, piste ' + rwy + ', tours de piste main gauche, ne depassez pas ' + flightLevel + ', affichez ' + squawk
             elif avion[5][-1:] == 'R':
                 if langue == 'EN':
                     clearance_txt = nom + 'VFR circuits approved, runway ' + rwy + ' right hand circuits, not above ' + flightLevel + ', squawk ' + squawk 
                 elif langue == 'FR':
-                    clearance_txt = nom + ', Tours de pistes approuves, piste ' + rwy + ', tours de piste main droite, ne depassez pas ' + flightLevel + ', squawk ' + squawk
+                    clearance_txt = nom + ', Tours de pistes approuves, piste ' + rwy + ', tours de piste main droite, ne depassez pas ' + flightLevel + ', affichez ' + squawk
             else:
                 print('Veuillez verifier la piste ')
         clearance = 'INIT'
@@ -552,6 +558,7 @@ def ground(avion):
     avion[8] = clearance
 
 def tower(avion):
+    (vents, altimetre) = meteo(aeroport_pos)
     longueurNom = len(avion[0])
     langue = avion[1]
     regle = avion[3]
@@ -579,7 +586,7 @@ def tower(avion):
     rwy = avion[5]
     clearance = avion[8]
     clearance_txt = ""
-    print('1. Line-Up')
+    print('\n1. Line-Up')
     print('2. Take-off')
     print('3. Atterissage')
     print('4. Clearances VFR')
@@ -624,15 +631,61 @@ def tower(avion):
         clearance = 'TKOF'
     #Atterissage
     elif typeClearance == '3':
-        sortie = input('Quelle sortie? ')
-        if langue == 'EN':
-            clearance_txt = nom + ', winds '+vents+', exit at ' + sortie + ', cleared to land runway ' + rwy
+        print ('1. Atterissage')
+        print ('2. Touch and go')
+        print ('3. Low pass')
+        print ('4. Stop and go')
+        print ('5. Go around')
+        operation = input('Quelle operation? ')
+        if operation == '1':
+            sortie = input('Quelle sortie? ').upper()
+            if langue == 'EN':
+                clearance_txt = nom + ', winds '+vents+', exit at ' + sortie + ', cleared to land runway ' + rwy
+    
+            elif langue  == 'FR':
+                clearance_txt = nom + ', vents '+vents+', sortez a ' +  sortie + ', autorise a atterir piste ' + rwy
+            clearance = 'LDG'+rwy
 
-        elif langue  == 'FR':
-            clearance_txt = nom + ', vents '+vents+', sortez a ' +  sortie + ', autorise a atterir piste ' + rwy
-        clearance = 'LDG'+rwy
+        elif operation == '2':
+            if langue == 'EN':
+                clearance_txt = nom + ', runway ' + rwy + ', cleared touch and go, winds '+vents
+            elif langue == 'FR':
+                clearance_txt = nom + ', piste ' + rwy + ', autorise toucher, vents '+vents
+            clearance = 'T&GO'
+
+        #Low Pass
+        elif operation == '3':
+            if langue == 'EN':
+                clearance_txt = nom + ', cleared low pass runway ' + rwy + ', winds '+vents
+            elif langue == 'FR':
+                clearance_txt = nom + ', autorise low pass piste ' + rwy + ', winds '+vents
+            clearance = 'LOWP'
+
+        #Stop and Go
+        elif operation == '4':
+            if langue == 'EN':
+                clearance_txt = nom + ', cleared to land runway ' + rwy + ', winds '+vents+' \n Report ready for take-off -> Donner clearance Takeoff'
+            if langue == 'FR':
+                clearance_txt = nom + ', autorise a atterir piste ' + rwy + ', vents '+vents+' \n Rappelez pret a decoller -> Donner clearance Takeoff'
+            clearance = 'S&GO'
+
+        #Go-Around	
+        elif operation == '5':
+            print ('1. Initie par ATC')
+            print ('2. Initie par pilote')
+            personne = input('Qui a initie le Go-Around? ')
+            if personne == '1':
+                raison = input('Raison? ')
+                if langue == 'EN':
+                    clearance_txt = nom + ', go around, ' + raison
+                elif langue == 'FR':
+                    clearance_txt = nom + ', remettez les gaz, ' + raison 
+
+            elif personne == '2':
+                clearance_txt = nom + ', roger'
+            clearance = 'G-A'
     #Clearance leg VFR
-    elif typeClearance == '3':
+    elif typeClearance == '5':
         if regle == 'I' or regle == 'Y':
             print('Non disponible pour les vols IFR')
             return()
@@ -643,7 +696,7 @@ def tower(avion):
             position = input('Quelle position? ')
 
             if position == '1':
-                print ('1. Rappelez fin de downwind')
+                print ('1. Rappelez millieu de downwind')
                 print ('2. Downwind -> Finale')
                 print ('3. Allongez Downwind ')
                 position2 = input('Quelle clearance? ')
@@ -651,10 +704,10 @@ def tower(avion):
                 #Report end of downwind
                 if position2 == '1':
                     if langue == 'EN':
-                        clearance_txt = nom + ', report end of downwind runway ' + rwy
+                        clearance_txt = nom + ', middle of downwind runway ' + rwy
 
                     elif langue == 'FR':
-                        clearance_txt = nom + ', rappelez fin de downwind piste ' + rwy
+                        clearance_txt = nom + ', rappelez millieu de vent arriere piste ' + rwy
 
                     clearance = 'DWND'
 
@@ -736,55 +789,7 @@ def tower(avion):
                             clearance = 'LHDW'
 
 
-    #Clearances d'approche
-    elif typeClearance == '7':
-        print ('1. Touch and go')
-        print ('2. Low pass')
-        print ('3. Stop and go')
-        print ('4. Go around')
-        operation = input('Quelle operation? ')
-
-        #Touch and Go	
-        if operation == '1':
-            if langue == 'EN':
-                clearance_txt = nom + ', runway ' + rwy + ', cleared touch and go, winds '+vents
-            elif langue == 'FR':
-                clearance_txt = nom + ', piste ' + rwy + ', autorise toucher, vents '+vents
-            clearance = 'T&GO'
-
-        #Low Pass
-        elif operation == '2':
-            if langue == 'EN':
-                clearance_txt = nom + ', cleared low pass runway ' + rwy + ', winds '+vents
-            elif langue == 'FR':
-                clearance_txt = nom + ', autorise low pass piste ' + rwy + ', winds '+vents
-            clearance = 'LOWP'
-
-        #Stop and Go
-        elif operation == '3':
-            if langue == 'EN':
-                clearance_txt = nom + ', cleared to land runway ' + rwy + ', winds '+vents+' \n Report ready for take-off -> Donner clearance Takeoff'
-            if langue == 'FR':
-                clearance_txt = nom + ', autorise a atterir piste ' + rwy + ', vents '+vents+' \n Rappelez pret a decoller -> Donner clearance Takeoff'
-            clearance = 'S&GO'
-
-        #Go-Around	
-        elif operation == '4':
-            print ('1. Initie par ATC')
-            print ('2. Initie par pilote')
-            personne = input('Qui a initie le Go-Around? ')
-            if personne == '1':
-                raison = input('Raison? ')
-                if langue == 'EN':
-                    clearance_txt = nom + ', go around, ' + raison
-                elif langue == 'FR':
-                    clearance_txt = nom + ', remettez les gaz, ' + raison 
-
-            elif personne == '2':
-                clearance_txt = nom + ', roger'
-            clearance = 'G-A'
-
-    elif typeClearance == '8':
+    elif typeClearance == '4':
         ATC = choisirATC()
         print ('1. Decollage -> point')
         print ('2. Sortie zone de controle')
@@ -806,6 +811,8 @@ def tower(avion):
         clearance = 'EXIT'
     print (clearance_txt)
     avion[8] = clearance
+    if avion[8] != 'TAXI' and len(avion) == 10:
+        avion.remove(avion[9])
 
 def departure(avion):
     print('Cette section n\'existe pas encore')
@@ -1209,7 +1216,60 @@ def UNICOM():
     ATC.append('UNICOM')
     ATC.append('122.8')
     listeATC.append(ATC)
+    
+def AIRPLANES_DEFAULT():
+    avion = []
+    remplirDictionnaire("dictionnaries/english/alphabet", anglais)
+    avion.append('ACA1365')
+    avion.append('EN')
+    avion.append('CYYZ')
+    avion.append('I')
+    avion.append('TRUDO2')
+    avion.append('24L')
+    avion.append('5000')
+    avion.append(4001)
+    avion.append(None)#clearance nulle
+    listeAvions.append(avion)
 
+
+    avion = []
+    remplirDictionnaire("dictionnaries/francais/alphabet", francais)
+    avion.append('AFR1365')
+    avion.append('FR')
+    avion.append('LFLL')
+    avion.append('I')
+    avion.append('TRUDO2')
+    avion.append('24L')
+    avion.append('5000')
+    avion.append(4002)
+    avion.append(None)#clearance nulle
+    listeAvions.append(avion)
+    
+    avion = []
+    remplirDictionnaire("dictionnaries/francais/alphabet", francais)
+    avion.append('C-GTSN')
+    avion.append('FR')
+    avion.append('CYUL')
+    avion.append('V')
+    avion.append('')
+    avion.append('24L')
+    avion.append('2500')
+    avion.append(4003)
+    avion.append(None)#clearance nulle
+    listeAvions.append(avion)
+
+    avion = []
+    remplirDictionnaire("dictionnaries/english/alphabet", anglais)
+    avion.append('N106US')
+    avion.append('EN')
+    avion.append('CYUL')
+    avion.append('V')
+    avion.append('')
+    avion.append('24L')
+    avion.append('2500')
+    avion.append(4001)
+    avion.append(None)#clearance nulle
+    listeAvions.append(avion)
 #### ===== ----- ===== ----- ===== ----- ===== ----- PROGRAMME PRINCIPAL ----- ===== ----- ===== ----- ===== ----- =====  ####
 (position,aeroport_pos) = position()
 remplirSquawk()
