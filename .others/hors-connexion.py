@@ -18,10 +18,10 @@ def platforme(platform):
 		os.system('CLS')
 
 def position():
-    position = []
+    position = ''
     aeroport_pos =''
     while len(aeroport_pos) != 4:
-        aeroport_pos = input('Quel est le code OACI de l\'aeroport / de la FIR? ') 
+        aeroport_pos = 'CYUL'
 
     while position != '1' and position != '2' and position != '3' and position != '4' and position != '5' and position != '6':
         print ('1. XXXX_DEL')
@@ -31,7 +31,7 @@ def position():
         print ('5. XXXX_APP')
         print ('6. XXXX_CTR')
         print('7. XXXX_FSS')
-        position = input('Quelle position? ')
+        position = '3'
         platforme(platform)
     return (position, aeroport_pos)
 
@@ -79,28 +79,40 @@ def meteo(aeroport_pos):
 def affichage(position):
     print('')
     if position == '1':
-        print('1. Clearance initiale')
+        print('1. Delivery (XXXX_DEL)')
         print('9. Urgence')
 
     elif position == '2':
-        print('1. Clearance initiale')
-        print('2. Push et demarrage')
-        print('3. Taxi')
+        print('1. Delivery (XXXX_DEL')
+        print('2. Sol (XXXX_GND)')
         print('9. Urgence')
 
-    elif position == '3' or position == '4'or position == '5' or  position == '6' :
-        print('1. Clearance initiale')
-        print('2. Push et demarrage')
-        print('3. Taxi')
-        print('4. Line-up')
-        print('5. Takeoff')
-        print('6. Leg VFR')
-        print('7. Landing')
-        print('8. Depart espace aerien VFR')
+    elif position == '3':
+        print('1. Delivery (XXXX_DEL)')
+        print('2. Sol (XXXX_GND)')
+        print('3. Tour (XXXX_TWR)')
+        print('9. Urgence')
+    
+    elif position == '4' or position == '5':
+        print('1. Delivery (XXXX_DEL)')
+        print('2. Sol (XXXX_GND)')
+        print('3. Tour (XXXX_TWR)')
+        print('4. Departs (XXXX_DEP)')
+        print('5. Approche (XXXX_APP)')
+        print('9. Urgence')
+    
+    elif position == '6':
+        print('1. Delivery (XXXX_DEL)')
+        print('2. Sol (XXXX_GND)')
+        print('3. Tour (XXXX_TWR)')
+        print('4. Departs (XXXX_DEP)')
+        print('5. Approche (XXXX_APP)')
+        print('6. Centre (XXXX_CTR')
         print('9. Urgence')
     else:
-        print("La position n'est pas valide; veuillez redemarrer.")
-
+        print('1. Service en vol (XXXX_FSS)')
+        print('9. Urgence')
+        
 def remplirSquawk():
 	for i in range(4001, 4778):
 		boolean = True
@@ -268,7 +280,7 @@ def supprimerAvion():
 
 
     
-def creerClearance(avion,position):
+def creerClearance(avion,position): #Voir tache
     affichage(position)
     typeClearance = input('Quelle clearance veux-tu donner? ')
     (vents, altimetre) = meteo(aeroport_pos)
@@ -604,7 +616,7 @@ def creerClearance(avion,position):
             avion.remove(avion[9])
     avion[8] = clearance
 
-def ajouterClearance():
+def AvionClearance():   #Choix de l'avion auquel on donne la clearance
     if len(listeAvions) > 0:
         platforme(platform)
         while True:
@@ -643,7 +655,7 @@ def modifierAvion(avion):
     print('2. Changer la destination')
     print('3. Changer la regle de vol')
     print('4. Changer la SID')
-    print('5. Changer la piste)' )
+    print('5. Changer la piste' )
     print('6. Changer l\' altitude')
     ObjetModif = input('Quelle modification veux-tu faire? ')
     if ObjetModif == '1':
@@ -684,8 +696,8 @@ def modifierAvion(avion):
                 if int(piste.replace('0' ,  '')[:2]) > 1 and int(piste.replace('0' ,  '')[:2]) <= 36:
                     avion[5] = piste.upper()
                     break
-                else:'Veuillez entrer un numéro de piste valide'
-            else:'Veuillez entrer un numéro de piste valide'
+                else:'Veuillez entrer un numero de piste valide'
+            else:'Veuillez entrer un numero de piste valide'
     
     elif ObjetModif == '6':
         altitude = input('Altitude? ')
@@ -878,7 +890,7 @@ def ajouterATC():
     listeATC.append(ATC)
     print("\nAJOUT DE L'ATC " + code)
 
-def ATCFrequency():
+def ATCFrequency(): #Verifie la frequence de l'ATC
     while True:
         frequency = input('Quelle est la frequence de l\'ATC? ').replace(',', '.')
         if float(frequency) > 117.975 and float(frequency) < 137.00 and float(frequency) != 121.5 :
@@ -933,7 +945,7 @@ def supprimerATC():
                 print('\nVEUILLEZ ENTRER UN ATC')
     else:
         print ('IL N\'Y A PAS D\'ATC DANS LA LISTE')
-def atc():
+def atc():            #Menu ATC
     afficherListeATC()
     print ('\n1, Ajouter un ATC ')
     print ('2. Supprimer un ATC')
@@ -943,7 +955,7 @@ def atc():
     elif option == '2':
         supprimerATC()
 
-def UNICOM():
+def UNICOM():   #Cree l'ATC UNICOM
     ATC = []    
     ATC.append('UNICOM')
     ATC.append('UNICOM')
@@ -951,7 +963,7 @@ def UNICOM():
     ATC.append('122.8')
     listeATC.append(ATC)
 
-def ACA1365():
+def ACA1365():  #N'est present que dans cette version, cree l'avion ACA1365 prerempli
     compagnie = 'ACA'
     numeroVol = '1365'
     nom = compagnie + numeroVol
@@ -1002,7 +1014,7 @@ while True:
 
     #AJOUTE CLEARANCE A UN AVION
     elif choix == '2':
-        ajouterClearance()
+        AvionClearance()
     
     #SUPPRIMER UN AVION   
     elif choix == '3':
